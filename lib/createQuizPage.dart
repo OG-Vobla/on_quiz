@@ -1,112 +1,98 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
-class CreateQuizPage extends StatelessWidget {
+const List<String> categoryList = <String>[
+  'Наука',
+  'Биология',
+  'История',
+  'Политика',
+  'Игры',
+  'Аниме',
+  'Кино',
+  'Спорт',
+  'Сериалы',
+  'Книги'
+];
+
+class CreateQuizPage extends StatefulWidget {
   const CreateQuizPage({super.key});
 
   @override
+  State<CreateQuizPage> createState() => _MyWidgetState();
+}
+
+String dropDownValue = categoryList.first;
+
+class _MyWidgetState extends State<CreateQuizPage> {
+  @override
   Widget build(BuildContext context) {
-
-    return  Column(
-
-              children:<Widget> [ 
-             Padding(padding: EdgeInsets.only(top: 62)),
-                        DropdownButton<String>(
-              items: <String>['A', 'B', 'C', 'D'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (_) {},
+    return Column(
+      children: <Widget>[
+        Padding(padding: EdgeInsets.only(top: 60)),
+        Container(
+          child: SizedBox(
+            width: 300,
+            height: 53,
+            child: TextField(
+              style: TextStyle(
+                  color: Color.fromARGB(250, 250, 250, 250),
+                  fontFamily: "OpenSans-SemiBold",
+                  fontSize: 22),
+              cursorColor: Color.fromARGB(250, 250, 250, 250),
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(20, 20, 10, 0),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(
+                      width: 0, color: Color.fromARGB(250, 93, 108, 215)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  borderSide: BorderSide(
+                      width: 0, color: Color.fromARGB(250, 93, 108, 215)),
+                ),
+                filled: true,
+                hintText: "Название",
+                fillColor: Color.fromARGB(250, 86, 94, 205),
+                hintStyle: TextStyle(
+                    color: Color.fromARGB(250, 250, 250, 250),
+                    fontFamily: "OpenSans-SemiBold",
+                    fontSize: 22),
+              ),
             ),
-             Image.asset('assets/ques_icon.png', width: 115, height: 115, fit: BoxFit.cover,),
-             Padding(padding: EdgeInsets.only(top: 5)),
-            Text(
-              "ОнКвиз",
-              style: TextStyle(color: Color.fromARGB(250, 249, 225, 159), fontFamily: "OpenSans-SemiBold", fontSize: 24),),
-              Padding(padding: EdgeInsets.only(top: 60)),
-            Text(
-              "Авторизация",
-              style: TextStyle(color: Colors.white, fontFamily: "OpenSans-SemiBold", fontSize: 32),),
-                         Padding(padding: EdgeInsets.only(top: 20)),
-            Container(
-                child: SizedBox(
-                width: 246,
-                height: 53,
-                child:  TextField(
-                                                    style:  TextStyle(color: Color.fromARGB(200, 40, 49, 73), fontFamily: "OpenSans-SemiBold", fontSize: 22),
-                  
-                  cursorColor: Color.fromARGB(6, 160, 160, 160),
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20, 20, 10, 0),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(width: 0, color: Color.fromARGB(250, 93, 108, 215)),
-                  ),
-                     focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(width: 0, color: Color.fromARGB(250, 93, 108, 215)),
-                  ),
-                filled: true,
-                hintText: "Логин",
-                fillColor: Color.fromARGB(255, 255, 255, 255),
-                hintStyle: TextStyle(color: Color.fromARGB(105, 40, 49, 73), fontFamily: "OpenSans-SemiBold", fontSize: 22),
-                
-                ),
-                 ),
-              ),
-              ),
-                         Padding(padding: EdgeInsets.only(top: 20)),
-                          Container(
-                child: SizedBox(
-                width: 246,
-                height: 53,
-                child:  TextField(
-                  
-                                  style:  TextStyle(color: Color.fromARGB(200, 40, 49, 73), fontFamily: "OpenSans-SemiBold", fontSize: 22),
-                  cursorColor: Color.fromARGB(6, 160, 160, 160),
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(20, 20, 10, 0),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(width: 0, color: Color.fromARGB(250, 93, 108, 215)),
-                  ),
-                     focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(width: 0, color: Color.fromARGB(250, 93, 108, 215)),
-                  ),
-                filled: true,
-                hintText: "Пароль",
-                fillColor: Color.fromARGB(255, 255, 255, 255),
-                hintStyle: TextStyle(color: Color.fromARGB(105, 40, 49, 73), fontFamily: "OpenSans-SemiBold", fontSize: 22),
-                
-                ),
-                 ),
-              ),
-              ),
-              
-              Padding(padding: EdgeInsets.only(top: 55  )),
-              Container(child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/mainPage');
-                }, child: Text(
-                    "Войти", 
-                  style: TextStyle(color: Colors.white, fontFamily: "OpenSans-SemiBold", fontSize: 18),
-                  ),
-                  style: ButtonStyle(
-                    
-                    backgroundColor: MaterialStateProperty.all<Color>(Color.fromARGB(255, 58, 40, 167)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      )
-                    )
-                  ),
-                  ) ,
-              height: 37,
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(top: 20)),
+        Container(
+          color: Color.fromARGB(250, 86, 94, 205),
+          child: SizedBox(
               width: 100,
-              ),
-              ],
-            );
+              height: 50,
+              child: DropdownButton<String>(
+                value: dropDownValue,
+                style: const TextStyle(color: Colors.white),
+                underline: Container(
+                  height: 2,
+                  color: Colors.white,
+                ),
+                icon: const Icon(Icons.keyboard_arrow_down_sharp),
+                items:
+                    categoryList.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                elevation: 10,
+                onChanged: (String? value) {
+                  // This is called when the user selects an item.
+                  setState(() {
+                    dropDownValue = value!;
+                  });
+                },
+              )),
+        ),
+        Padding(padding: EdgeInsets.only(top: 55)),
+      ],
+    );
   }
 }
