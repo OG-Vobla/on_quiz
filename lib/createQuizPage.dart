@@ -88,7 +88,10 @@ class _MyWidgetState extends State<CreateQuizPage> {
                     categoryList.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value),
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text(value),
+                    ),
                   );
                 }).toList(),
                 elevation: 20,
@@ -124,7 +127,10 @@ class _MyWidgetState extends State<CreateQuizPage> {
                     .map<DropdownMenuItem<String>>((String index) {
                   return DropdownMenuItem<String>(
                     value: index,
-                    child: Text(index),
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: Text(index),
+                    ),
                   );
                 }).toList(),
                 elevation: 20,
@@ -139,7 +145,7 @@ class _MyWidgetState extends State<CreateQuizPage> {
         Padding(padding: EdgeInsets.only(top: 30)),
         Container(
           child: SizedBox(
-            width: 159,
+            width: 100,
             height: 53,
             child: TextField(
               style: TextStyle(
@@ -160,12 +166,12 @@ class _MyWidgetState extends State<CreateQuizPage> {
                       width: 0, color: Color.fromARGB(250, 93, 108, 215)),
                 ),
                 filled: true,
-                hintText: "Количество",
+                hintText: "Кол",
                 fillColor: Color.fromARGB(250, 86, 94, 205),
                 hintStyle: TextStyle(
                     color: Color.fromARGB(250, 250, 250, 250),
                     fontFamily: "OpenSans-SemiBold",
-                    fontSize: 18),
+                    fontSize: 22),
               ),
             ),
           ),
