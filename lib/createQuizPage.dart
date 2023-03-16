@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+bool isFirstRunCat = true;
+bool isFirstRunCom = true;
+
+
 const List<String> categoryList = <String>[
   'Наука',
   'Биология',
@@ -22,8 +26,8 @@ class CreateQuizPage extends StatefulWidget {
   State<CreateQuizPage> createState() => _MyWidgetState();
 }
 
-String categoryValue = categoryList.first;
-String complexity = complexityList.first;
+String? categoryValue = null;
+String? complexity = null;
 
 class _MyWidgetState extends State<CreateQuizPage> {
   @override
@@ -73,6 +77,11 @@ class _MyWidgetState extends State<CreateQuizPage> {
               width: 220,
               height: 50,
               child: DropdownButton<String>(
+                onTap: () {
+                  setState(() {
+                    isFirstRunCat= false;
+                  });
+                },
                 value: categoryValue,
                 isExpanded: true,
                 underline: Container(
@@ -87,10 +96,10 @@ class _MyWidgetState extends State<CreateQuizPage> {
                 items:
                     categoryList.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
-                    value: value,
-                    child: Container(
+                      value: value,
+                      child: Container(
                       margin: EdgeInsets.all(10),
-                      child: Text(value),
+                      child:  Text(value, style: const TextStyle(color: Colors.white, fontSize: 22,fontFamily: "OpenSans-SemiBold",)),
                     ),
                   );
                 }).toList(),
@@ -100,7 +109,11 @@ class _MyWidgetState extends State<CreateQuizPage> {
                   setState(() {
                     categoryValue = value!;
                   });
-                },
+                },             
+                     hint: 
+                      Container(
+                      margin: EdgeInsets.all(10),
+                      child:  Text("Категория", style: const TextStyle(color: Colors.white, fontSize: 22,fontFamily: "OpenSans-SemiBold",)),)
               )),
         ),
         Padding(padding: EdgeInsets.only(top: 30)),
@@ -112,6 +125,12 @@ class _MyWidgetState extends State<CreateQuizPage> {
               width: 190,
               height: 50,
               child: DropdownButton<String>(
+                                onTap: () {
+                  
+                  setState(() {
+                    isFirstRunCom = false;
+                  });
+                },
                 value: complexity,
                 isExpanded: true,
                 underline: Container(
@@ -129,18 +148,21 @@ class _MyWidgetState extends State<CreateQuizPage> {
                     value: index,
                     child: Container(
                       margin: EdgeInsets.all(10),
-                      child: Text(index),
+                      child:  Text(index, style: const TextStyle(color: Colors.white, fontSize: 22,fontFamily: "OpenSans-SemiBold",)),
                     ),
                   );
                 }).toList(),
                 elevation: 20,
                 onChanged: (String? index) {
-                  // This is called when the user selects an item.
                   setState(() {
                     complexity = index!;
                   });
                 },
-              )),
+                    hint: 
+                      Container(
+                      margin: EdgeInsets.all(10),
+                      child:  Text("Сложность", style: const TextStyle(color: Colors.white, fontSize: 22,fontFamily: "OpenSans-SemiBold",)),)
+                            )),
         ),
         Padding(padding: EdgeInsets.only(top: 30)),
         Container(
@@ -191,7 +213,9 @@ class _MyWidgetState extends State<CreateQuizPage> {
               iconSize: 80,
               color: Color.fromARGB(250, 132, 199, 110),
               onPressed: () {
-                Navigator.pushNamed(context, '/CreateQuestion');
+                if(categoryValue != null && complexity != null ){
+                  Navigator.pushNamed(context, "/createQuestion");
+                }
               },
             ),
           ),

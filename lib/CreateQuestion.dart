@@ -21,11 +21,11 @@ class _CreateQuestionState extends State<CreateQuestion> {
           Container(
             child: SizedBox(
               width: 350,
-              height: 250,
+              height: 150,
               child: TextField(
                 keyboardType: TextInputType.multiline,
-                expands: true,
-                maxLines: null,
+                minLines: 1,
+                maxLines: 4,
                 style: TextStyle(
                   color: Colors.white,
                   fontFamily: "OpenSans-SemiBold",
