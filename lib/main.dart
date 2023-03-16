@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'authPage.dart';
 import 'registrationPage.dart';
 import 'mainPage.dart';
+import 'myquiz.dart';
+import 'CreateQuestion.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +24,8 @@ class MyThemeApp extends StatelessWidget {
         '/': (context) => const AuthPage(),
         '/regPage': (context) => const RegistrationPage(),
         '/mainPage': (context) => const MainPage(),
-
+        '/myquiz': (context) => const MyQuizPage(),
+        '/CreateQuestion': (context) => const CreateQuestion(),
       },
     );
   }

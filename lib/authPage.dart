@@ -49,7 +49,7 @@ class _MyAuthPageState extends State<AuthPage> {
                   height: 115,
                   fit: BoxFit.cover,
                 ),
-                Padding(padding: EdgeInsets.only(top: 5)),
+                Padding(padding: EdgeInsets.only(top: 20)),
                 Text(
                   "ОнКвиз",
                   style: TextStyle(

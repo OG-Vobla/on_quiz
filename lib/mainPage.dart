@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:on_quiz/myquiz.dart';
 import 'quizsPage.dart';
 import 'createQuizPage.dart';
 
@@ -59,6 +60,7 @@ class StateMainPage extends State<MainPage> {
     final list = [
       const QuizsPage(),
       const CreateQuizPage(),
+      const MyQuizPage(),
     ];
     AppBar appBarSearch = AppBar(
       automaticallyImplyLeading: true,

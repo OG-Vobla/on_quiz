@@ -190,7 +190,9 @@ class _MyWidgetState extends State<CreateQuizPage> {
               icon: Icon(Icons.arrow_forward),
               iconSize: 80,
               color: Color.fromARGB(250, 132, 199, 110),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/CreateQuestion');
+              },
             ),
           ),
         ),
