@@ -92,7 +92,7 @@ class _MyAuthPageState extends State<AuthPage> {
                               color: Color.fromARGB(250, 93, 108, 215)),
                         ),
                         filled: true,
-                        hintText: "Логин",
+                        hintText: "Почта",
                         fillColor: Color.fromARGB(255, 255, 255, 255),
                         hintStyle: TextStyle(
                             color: Color.fromARGB(105, 40, 49, 73),
