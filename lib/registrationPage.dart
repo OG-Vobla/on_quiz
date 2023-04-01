@@ -1,9 +1,11 @@
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:on_quiz/services/databaseConection.dart';
 import 'package:on_quiz/services/model.dart';
 import 'package:on_quiz/services/services.dart';
 
@@ -29,8 +31,12 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
   final RepeatPassword = TextEditingController();
   final Phone = TextEditingController();
   final Email = TextEditingController();
+  String ErrorMes = "";
+  bool isError = false;
   DbConnection dbConnection = DbConnection();
+  DatabaseConection dbCon = DatabaseConection();
   CollectionReference users = FirebaseFirestore.instance.collection('users');
+
 
   @override
   void dispose() {
@@ -44,6 +50,7 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Color.fromARGB(250, 93, 108, 215),
       floatingActionButton: FloatingActionButton(
@@ -69,7 +76,25 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                       fontFamily: "OpenSans-SemiBold",
                       fontSize: 32),
                 ),
-                Padding(padding: EdgeInsets.only(top: 30)),
+                Padding(padding: EdgeInsets.only(top: 20)),
+                isError
+                    ? Container(
+                        width: 300,
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade400,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          ErrorMes,
+                          style: TextStyle(
+                              color: Color.fromARGB(199, 0, 0, 0),
+                              fontFamily: "OpenSans-SemiBold",
+                              fontSize: 18),
+                        ),
+                      )
+                    : Container(),
+                Padding(padding: EdgeInsets.only(top: 10)),
                 Container(
                   child: SizedBox(
                     width: 246,
@@ -258,18 +283,77 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                 Container(
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (Password.text == RepeatPassword.text) {
-                        QuerySnapshot querySnapshot = await users.get();
+                      List<UserM> newUsers = [];
+                       QuerySnapshot querySnapshot = await users.get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    for (int i = 0; i < allData.length; i++) {
+      newUsers.add(new UserM(Login: querySnapshot.docs[i].get('Login'), Phone: querySnapshot.docs[i].get('Phone')));
+  }
+                      if (Password.text != "" &&
+                          RepeatPassword.text != "" &&
+                          Email.text != "" &&
+                          Phone.text != "" &&
+                          Login.text != "") {
+                        if (Password.text == RepeatPassword.text) {
+                          if (Password.text.length >= 6) {
+                            if (isValidEmail(Email.text)) {
+                              if (isValidPhoneNumber(Phone.text)) {
+                                
+                                int index = 0;
 
-                        UserModel? user = await dbConnection.signIn(
-                            Email.text, Password.text);
-                        if (user == null) {
-                          await users
-                              .add({'Login': Login.text, 'Email': Email.text});
-                          user = await dbConnection.signUp(
-                              Email.text, Password.text);
-                          Navigator.pushNamed(context, '/mainPage');
+                                UserModel? user = await dbConnection.signIn(
+                                    Email.text, Password.text);
+
+                                if (newUsers.where((element) => element.Login == Login).length == 0) {
+                                  if (user == null) {
+                                    user = await dbConnection.signUp(
+                                        Email.text, Password.text);
+                                        dbCon.uid = user?.id;
+                                        dbCon.updateUserData( Login.text, Phone.text);
+                                    Navigator.pushNamed(context, '/mainPage');
+                                  } else {
+                                    setState(() {
+                                      ErrorMes =
+                                          "Такой пользователь уже существует";
+                                      isError = true;
+                                    });
+                                  }
+                                } else {
+                                  setState(() {
+                                    ErrorMes =
+                                        "Пользователь с таким логином уже существует";
+                                    isError = true;
+                                  });
+                                }
+                              } else {
+                                setState(() {
+                                  ErrorMes = "Некоректный номер";
+                                  isError = true;
+                                });
+                              }
+                            } else {
+                              setState(() {
+                                ErrorMes = "Некоректная почта";
+                                isError = true;
+                              });
+                            }
+                          } else {
+                            setState(() {
+                              ErrorMes = "Пароль должен быть больше 5 символов";
+                              isError = true;
+                            });
+                          }
+                        } else {
+                          setState(() {
+                            ErrorMes = "Пароли не совподают";
+                            isError = true;
+                          });
                         }
+                      } else {
+                        setState(() {
+                          ErrorMes = "Не все поля заполнены";
+                          isError = true;
+                        });
                       }
                     },
                     child: Text(
@@ -297,5 +381,26 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
         ),
       ),
     );
+  }
+}
+
+bool isValidEmail(String? str) {
+  return RegExp(
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+      .hasMatch(str!);
+}
+
+bool isValidPhoneNumber(String? value) =>
+    RegExp(r'(^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$)')
+        .hasMatch(value ?? '');
+
+class UserM{
+  String? Login;
+  String? Phone;
+   UserM({this.Login, this.Phone  });
+
+  UserM.romJson(Map data){
+    Login = data['Login'];
+    Phone = data['Phone'];
   }
 }

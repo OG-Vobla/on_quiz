@@ -57,6 +57,107 @@ class StateMainPage extends State<MainPage> {
   bool tittleAppBar = false;
   @override
   Widget build(BuildContext context) {
+    //  Widget listSearchWidget(BuildContext context) {
+    //   return StreamBuilder(
+    //     stream: FirebaseFirestore.instance.collection('deals').snapshots(),
+    //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    //       if (snapshot.data?.docs.length == 0 || !snapshot.hasData) {
+    //         return Text(
+    //           "Нет Записей",
+    //           style: TextStyle(
+    //               color: Colors.black,
+    //               fontFamily: "IMFellGreatPrimerSC-Regular",
+    //               fontSize: 20),
+    //         );
+    //       } else {
+    //         return ListView.builder(
+    //           itemCount: snapshot.data?.docs.length,
+    //           itemBuilder: (BuildContext context, int index) {
+    //             Card quizCard = Card(
+    //               shape: RoundedRectangleBorder(
+    //                 borderRadius: BorderRadius.circular(15),
+    //               ),
+    //               child: ListTile(
+    //                 shape: RoundedRectangleBorder(
+    //                   borderRadius: BorderRadius.circular(15),
+    //                 ),
+    //                 tileColor: Color.fromARGB(255, 0, 0, 0),
+    //                 title: Text(
+    //                   snapshot.data?.docs[index].get('title')!,
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontFamily: "IMFellGreatPrimerSC-Regular",
+    //                       fontSize: 20),
+    //                 ),
+    //                 subtitle: Text(
+    //                   snapshot.data?.docs[index].get('discription')!,
+    //                   style: TextStyle(
+    //                       color: Colors.white,
+    //                       fontFamily: "IMFellGreatPrimerSC-Regular",
+    //                       fontSize: 16),
+    //                 ),
+    //                 trailing: IconButton(
+    //                   icon: Icon(
+    //                     Icons.delete_outlined,
+    //                     color: Color.fromARGB(255, 255, 255, 255),
+    //                   ),
+    //                   onPressed: () {
+    //                     FirebaseFirestore.instance
+    //                         .collection('deals')
+    //                         .doc(snapshot.data?.docs[index].id)
+    //                         .delete();
+    //                     setState(() {
+    //                       newDealList = dealList;
+    //                       searchController.clear();
+    //                       tittleAppBar = false;
+    //                     });
+    //                   },
+    //                 ),
+    //                 onTap: () {
+    //                   Navigator.push(
+    //                           context,
+    //                           new MaterialPageRoute(
+    //                               builder: (context) => new EditDealPages()))
+    //                       .then((value) {
+    //                     setState(() {
+    //                       if (activeDeal.title == "" &&
+    //                           activeDeal.discription == "") {
+    //                         FirebaseFirestore.instance
+    //                             .collection('deals')
+    //                             .doc(snapshot.data?.docs[index].id)
+    //                             .delete();
+    //                       }
+    //                       FirebaseFirestore.instance
+    //                           .collection('deals')
+    //                           .doc(snapshot.data?.docs[index].id)
+    //                           .set({
+    //                         'title': activeDeal.title,
+    //                         'discription': activeDeal.discription,
+    //                       });
+    //                     });
+    //                   });
+    //                   activeDeal = new Deal(
+    //                       title: snapshot.data?.docs[index].get('title'),
+    //                       discription:
+    //                           snapshot.data?.docs[index].get('discription'));
+    //                 },
+    //               ),
+    //             );
+    //             String newStr = snapshot.data?.docs[index].get('title');
+    //             if (tittleAppBar) {
+    //               if (newStr.contains(searchText)) {
+    //                 return card;
+    //               }
+    //             } else {
+    //               return card;
+    //             }
+    //             return Card();
+    //           },
+    //         );
+    //       }
+    //     },
+    //   );
+    //  }
     final list = [
       const QuizsPage(),
       const CreateQuizPage(),

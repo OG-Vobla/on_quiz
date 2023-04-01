@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:on_quiz/registrationPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:on_quiz/services/model.dart';
+import 'package:on_quiz/services/services.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -12,12 +15,15 @@ class AuthPage extends StatefulWidget {
 }
 
 class _MyAuthPageState extends State<AuthPage> {
-  final Login = TextEditingController();
+  DbConnection dbConnection = DbConnection();
+  final Email = TextEditingController();
   final Password = TextEditingController();
+  String ErrorMes = "";
+  bool isError = false;
 
   @override
   void dispose() {
-    Login.dispose();
+    Email.dispose();
     Password.dispose();
     super.dispose();
   }
@@ -57,7 +63,25 @@ class _MyAuthPageState extends State<AuthPage> {
                       fontFamily: "OpenSans-SemiBold",
                       fontSize: 24),
                 ),
-                Padding(padding: EdgeInsets.only(top: 60)),
+                Padding(padding: EdgeInsets.only(top: 40)),
+                isError
+                    ? Container(
+                        width: 300,
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade400,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          ErrorMes,
+                          style: TextStyle(
+                              color: Color.fromARGB(199, 0, 0, 0),
+                              fontFamily: "OpenSans-SemiBold",
+                              fontSize: 18),
+                        ),
+                      )
+                    : Container(),
+                Padding(padding: EdgeInsets.only(top: 10)),
                 Text(
                   "Авторизация",
                   style: TextStyle(
@@ -75,7 +99,7 @@ class _MyAuthPageState extends State<AuthPage> {
                           color: Color.fromARGB(200, 40, 49, 73),
                           fontFamily: "OpenSans-SemiBold",
                           fontSize: 22),
-                      controller: Login,
+                      controller: Email,
                       cursorColor: Color.fromARGB(6, 160, 160, 160),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.fromLTRB(20, 20, 10, 0),
@@ -142,8 +166,38 @@ class _MyAuthPageState extends State<AuthPage> {
                 Padding(padding: EdgeInsets.only(top: 55)),
                 Container(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/mainPage');
+                    onPressed: () async {
+                      if (Password.text != "" && Email.text != "") {
+                        if (Password.text.length >= 6) {
+                          if (isValidEmail(Email.text)) {
+                            UserModel? user = await dbConnection.signIn(
+                                Email.text, Password.text);
+                            if (user != null) {
+                              Navigator.pushNamed(context, '/mainPage');
+                            } else {
+                              setState(() {
+                                ErrorMes = "Вы не зарегистрированы";
+                                isError = true;
+                              });
+                            }
+                          } else {
+                            setState(() {
+                              ErrorMes = "Некоректная почта";
+                              isError = true;
+                            });
+                          }
+                        } else {
+                          setState(() {
+                            ErrorMes = "Пароль должен быть больше 5 символов";
+                            isError = true;
+                          });
+                        }
+                      } else {
+                        setState(() {
+                          ErrorMes = "Не все поля заполнены";
+                          isError = true;
+                        });
+                      }
                     },
                     child: Text(
                       "Войти",
