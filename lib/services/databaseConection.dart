@@ -6,10 +6,11 @@ class DatabaseConection{
 
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-  Future updateUserData(String login, String phone) async{
+  Future updateUserData(String login, String phone, String id) async{
     return await users.doc(uid).set({
       'Login': login,
-      'Phone' : phone
+      'Phone' : phone,
+      'id' : id
     });
   }
 

@@ -37,7 +37,6 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
   DatabaseConection dbCon = DatabaseConection();
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-
   @override
   void dispose() {
     Login.dispose();
@@ -50,7 +49,6 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Color.fromARGB(250, 93, 108, 215),
       floatingActionButton: FloatingActionButton(
@@ -284,11 +282,15 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       List<UserM> newUsers = [];
-                       QuerySnapshot querySnapshot = await users.get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    for (int i = 0; i < allData.length; i++) {
-      newUsers.add(new UserM(Login: querySnapshot.docs[i].get('Login'), Phone: querySnapshot.docs[i].get('Phone')));
-  }
+                      QuerySnapshot querySnapshot = await users.get();
+                      final allData =
+                          querySnapshot.docs.map((doc) => doc.data()).toList();
+                      for (int i = 0; i < allData.length; i++) {
+                        newUsers.add(new UserM(
+                            Login: querySnapshot.docs[i].get('Login'),
+                            Phone: querySnapshot.docs[i].get('Phone'),
+                            id:  querySnapshot.docs[i].get('id')));
+                      }
                       if (Password.text != "" &&
                           RepeatPassword.text != "" &&
                           Email.text != "" &&
@@ -298,19 +300,23 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                           if (Password.text.length >= 6) {
                             if (isValidEmail(Email.text)) {
                               if (isValidPhoneNumber(Phone.text)) {
-                                
                                 int index = 0;
 
                                 UserModel? user = await dbConnection.signIn(
                                     Email.text, Password.text);
 
-                                if (newUsers.where((element) => element.Login == Login).length == 0) {
+                                if (newUsers
+                                        .where(
+                                            (element) => element.Login == Login)
+                                        .length ==
+                                    0) {
                                   if (user == null) {
                                     user = await dbConnection.signUp(
                                         Email.text, Password.text);
-                                        dbCon.uid = user?.id;
-                                        dbCon.updateUserData( Login.text, Phone.text);
-                                    Navigator.pushNamed(context, '/mainPage');
+                                    dbCon.uid = user?.id;
+                                    dbCon.updateUserData(
+                                        Login.text, Phone.text, dbCon.uid.toString());
+                                    Navigator.pushNamed(context, '/');
                                   } else {
                                     setState(() {
                                       ErrorMes =
@@ -394,13 +400,18 @@ bool isValidPhoneNumber(String? value) =>
     RegExp(r'(^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$)')
         .hasMatch(value ?? '');
 
-class UserM{
+class UserM {
   String? Login;
   String? Phone;
-   UserM({this.Login, this.Phone  });
+  String? id;
+  UserM({this.Login, this.Phone, this.id});
 
-  UserM.romJson(Map data){
+  UserM.romJson(Map data) {
     Login = data['Login'];
     Phone = data['Phone'];
+    id = data['id'];
+
   }
+
+  static fromMap(value) {}
 }

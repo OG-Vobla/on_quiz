@@ -173,6 +173,7 @@ class _MyAuthPageState extends State<AuthPage> {
                             UserModel? user = await dbConnection.signIn(
                                 Email.text, Password.text);
                             if (user != null) {
+                              curUser = user;
                               Navigator.pushNamed(context, '/mainPage');
                             } else {
                               setState(() {
@@ -245,3 +246,4 @@ class _MyAuthPageState extends State<AuthPage> {
     );
   }
 }
+UserModel? curUser ;
