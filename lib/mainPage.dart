@@ -20,33 +20,38 @@ class MainPage extends StatefulWidget {
 
 class StateMainPage extends State<MainPage> {
   int selectedIndex = 0;
+  String searchText = "";
 
   void onItemTap(int index) {
     setState(() {
       selectedIndex = index;
     });
-
-    void initFirebase() async {
-      WidgetsFlutterBinding.ensureInitialized();
-      await Firebase.initializeApp();
-    }
-
-    @override
-    void initState() {
-      super.initState();
-      initFirebase();
-    }
   }
-
-  onItemSearch(String value) {
+ onItemSearch(String value) {
     setState(
       () {
-        // newDealList = dealList
-        //     .where((element) => element.title!.contains(value))
+        searchText = value;
+
+        // return newDealList
+        //     .where(
+        //       (element) => element.title!.contains(value),
+        //     )
         //     .toList();
       },
     );
   }
+  void initFirebase() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initFirebase();
+  }
+
+
 
   TextEditingController searchController = TextEditingController();
   final title = [
@@ -57,109 +62,117 @@ class StateMainPage extends State<MainPage> {
   bool tittleAppBar = false;
   @override
   Widget build(BuildContext context) {
-    //  Widget listSearchWidget(BuildContext context) {
-    //   return StreamBuilder(
-    //     stream: FirebaseFirestore.instance.collection('deals').snapshots(),
-    //     builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-    //       if (snapshot.data?.docs.length == 0 || !snapshot.hasData) {
-    //         return Text(
-    //           "Нет Записей",
-    //           style: TextStyle(
-    //               color: Colors.black,
-    //               fontFamily: "IMFellGreatPrimerSC-Regular",
-    //               fontSize: 20),
-    //         );
-    //       } else {
-    //         return ListView.builder(
-    //           itemCount: snapshot.data?.docs.length,
-    //           itemBuilder: (BuildContext context, int index) {
-    //             Card quizCard = Card(
-    //               shape: RoundedRectangleBorder(
-    //                 borderRadius: BorderRadius.circular(15),
-    //               ),
-    //               child: ListTile(
-    //                 shape: RoundedRectangleBorder(
-    //                   borderRadius: BorderRadius.circular(15),
-    //                 ),
-    //                 tileColor: Color.fromARGB(255, 0, 0, 0),
-    //                 title: Text(
-    //                   snapshot.data?.docs[index].get('title')!,
-    //                   style: TextStyle(
-    //                       color: Colors.white,
-    //                       fontFamily: "IMFellGreatPrimerSC-Regular",
-    //                       fontSize: 20),
-    //                 ),
-    //                 subtitle: Text(
-    //                   snapshot.data?.docs[index].get('discription')!,
-    //                   style: TextStyle(
-    //                       color: Colors.white,
-    //                       fontFamily: "IMFellGreatPrimerSC-Regular",
-    //                       fontSize: 16),
-    //                 ),
-    //                 trailing: IconButton(
-    //                   icon: Icon(
-    //                     Icons.delete_outlined,
-    //                     color: Color.fromARGB(255, 255, 255, 255),
-    //                   ),
-    //                   onPressed: () {
-    //                     FirebaseFirestore.instance
-    //                         .collection('deals')
-    //                         .doc(snapshot.data?.docs[index].id)
-    //                         .delete();
-    //                     setState(() {
-    //                       newDealList = dealList;
-    //                       searchController.clear();
-    //                       tittleAppBar = false;
-    //                     });
-    //                   },
-    //                 ),
-    //                 onTap: () {
-    //                   Navigator.push(
-    //                           context,
-    //                           new MaterialPageRoute(
-    //                               builder: (context) => new EditDealPages()))
-    //                       .then((value) {
-    //                     setState(() {
-    //                       if (activeDeal.title == "" &&
-    //                           activeDeal.discription == "") {
-    //                         FirebaseFirestore.instance
-    //                             .collection('deals')
-    //                             .doc(snapshot.data?.docs[index].id)
-    //                             .delete();
-    //                       }
-    //                       FirebaseFirestore.instance
-    //                           .collection('deals')
-    //                           .doc(snapshot.data?.docs[index].id)
-    //                           .set({
-    //                         'title': activeDeal.title,
-    //                         'discription': activeDeal.discription,
-    //                       });
-    //                     });
-    //                   });
-    //                   activeDeal = new Deal(
-    //                       title: snapshot.data?.docs[index].get('title'),
-    //                       discription:
-    //                           snapshot.data?.docs[index].get('discription'));
-    //                 },
-    //               ),
-    //             );
-    //             String newStr = snapshot.data?.docs[index].get('title');
-    //             if (tittleAppBar) {
-    //               if (newStr.contains(searchText)) {
-    //                 return card;
-    //               }
-    //             } else {
-    //               return card;
-    //             }
-    //             return Card();
-    //           },
-    //         );
-    //       }
-    //     },
-    //   );
-    //  }
+    Icon icon = new Icon(
+                                    Icons.star,
+                                    color: Color.fromARGB(255, 249, 225, 159),
+                                    size: 35,
+                                  ) ;
+    Widget listSearchWidget(BuildContext context) {
+      return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('quizs').snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.data?.docs.length == 0 || !snapshot.hasData) {
+            return Text(
+              "Нет Записей",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "IMFellGreatPrimerSC-Regular",
+                  fontSize: 20),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: snapshot.data?.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                Card card = new  Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: const BorderSide(
+                    color: Color.fromARGB(255, 86, 94, 205),
+                  )),
+              color: Color.fromARGB(255, 86, 94, 205),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                             snapshot.data?.docs[index].get('name'),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "OpenSans-SemiBold",
+                                fontSize: 22,
+                              ),
+                            ),
+                          )),
+                      Spacer(),
+                      Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Align(
+                              alignment: Alignment.topLeft,
+                                child: 
+                                  (snapshot.data?.docs[index].get('difficult')!  == "Легкая"? 
+                                  icon : (snapshot.data?.docs[index].get('difficult')!  == "Средняя" ? (Row(children: [icon, icon],)
+                                   ): Row(children: [icon, icon, icon]) ))
+                              
+                              ))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              snapshot.data?.docs[index].get('userLogin'),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "OpenSans-SemiBold",
+                                fontSize: 22,
+                              ),
+                            ),
+                          )),
+                      Spacer(),
+                      Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              snapshot.data?.docs[index].get('category'),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "OpenSans-SemiBold",
+                                fontSize: 22,
+                              ),
+                            ),
+                          ))
+                    ],
+                  )
+                ],
+              ),
+            );
+                String newStr = snapshot.data?.docs[index].get('name');
+                if (tittleAppBar) {
+                  if (newStr.contains(searchText)) {
+                    return card;
+                  }
+                } else {
+                  return card;
+                }
+                return Card();
+              },
+            );
+          }
+        },
+      );
+    }
+
     final list = [
-      const QuizsPage(),
+      listSearchWidget(context),
       const CreateQuizPage(),
       const MyQuizPage(),
     ];
@@ -227,10 +240,16 @@ class StateMainPage extends State<MainPage> {
     AppBar deffaultAppBar = AppBar(
       automaticallyImplyLeading: true,
       iconTheme: IconThemeData(
-        color: Colors.white, //change your color here
+        color: Color.fromARGB(250, 153, 144, 210), //change your color here
       ),
       backgroundColor: Color.fromARGB(255, 58, 40, 167),
-      title: Text(title[selectedIndex]),
+      title: Text(
+        title[selectedIndex],
+        style: TextStyle(
+            color: Color.fromARGB(250, 153, 144, 210),
+            fontFamily: "OpenSans-SemiBold",
+            fontSize: 22),
+      ),
       centerTitle: true,
     );
     return Scaffold(
@@ -244,39 +263,39 @@ class StateMainPage extends State<MainPage> {
           child: list.elementAt(selectedIndex),
         ),
         bottomNavigationBar: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
             child: SizedBox(
-              height: 60,
+              height: MediaQuery.of(context).size.height * 0.08,
               child: BottomNavigationBar(
                 onTap: onItemTap,
                 backgroundColor: (Color.fromARGB(255, 58, 40, 167)),
+                unselectedItemColor: Color.fromARGB(255, 145, 135, 206),
+                selectedItemColor: Color.fromARGB(255, 207, 217, 255),
                 selectedLabelStyle: TextStyle(
                     color: Color.fromARGB(255, 207, 217, 255),
-                    fontFamily: "IMFellGreatPrimerSC-Regular",
-                    fontSize: 14),
+                    fontFamily: "OpenSans-SemiBold",
+                    fontSize: MediaQuery.of(context).size.height * 0.014),
                 unselectedLabelStyle: TextStyle(
                     color: Color.fromARGB(255, 207, 217, 255),
-                    fontFamily: "IMFellGreatPrimerSC-Regular",
-                    fontSize: 14),
+                    fontFamily: "OpenSans-SemiBold",
+                    fontSize: MediaQuery.of(context).size.height * 0.011),
                 showUnselectedLabels: true,
-                items: const <BottomNavigationBarItem>[
+                currentIndex: selectedIndex,
+                items: const [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.people_outline_outlined,
-                        color: Color.fromARGB(255, 145, 135, 206), size: 35),
-                    label: '',
+                    icon: Icon(Icons.people_outline_outlined, size: 35),
+                    label: 'Онлайн викторины',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.add,
-                      color: Color.fromARGB(255, 145, 135, 206),
-                      size: 40,
+                      size: 35,
                     ),
-                    label: '',
+                    label: 'Создать викторину',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline_outlined,
-                        color: Color.fromARGB(255, 145, 135, 206), size: 35),
-                    label: '',
+                    icon: Icon(Icons.person_outline_outlined, size: 35),
+                    label: 'Мои викторины',
                   ),
                 ],
               ),

@@ -43,7 +43,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
           Container(
             child: SizedBox(
               width: 350,
-              height: 150,
+              height: MediaQuery.of(context).size.height * 0.2,
               child: TextField(
                 keyboardType: TextInputType.multiline,
                 minLines: 1,
@@ -77,16 +77,16 @@ class _CreateQuestionState extends State<CreateQuestion> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: 5)),
+          Padding(padding: EdgeInsets.only(top:MediaQuery.of(context).size.height * 0.02,)),
 
           SizedBox(
-            height: 400,
-            child:           ListView(
-            children: [
-                        Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: Column(
+              children: [
+                                       Container(
             child: SizedBox(
               width: 300,
-              height: 53,
+              height: MediaQuery.of(context).size.height * 0.07,
               child: TextField(
                 controller: FirstAnswerController,
                 style: TextStyle(
@@ -117,11 +117,11 @@ class _CreateQuestionState extends State<CreateQuestion> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: 30)),
+          Padding(padding: EdgeInsets.only(top:MediaQuery.of(context).size.height * 0.02,)),
           Container(
             child: SizedBox(
               width: 300,
-              height: 53,
+              height: MediaQuery.of(context).size.height * 0.07,
               child: TextField(
                 controller: SecondAnswerController,
                 style: TextStyle(
@@ -152,11 +152,11 @@ class _CreateQuestionState extends State<CreateQuestion> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: 30)),
+          Padding(padding: EdgeInsets.only(top:MediaQuery.of(context).size.height * 0.02,)),
           Container(
             child: SizedBox(
               width: 300,
-              height: 53,
+              height: MediaQuery.of(context).size.height * 0.07,
               child: TextField(
                 controller: ThreeAnswerController,
                 style: TextStyle(
@@ -187,10 +187,12 @@ class _CreateQuestionState extends State<CreateQuestion> {
               ),
             ),
           ),
+          Padding(padding: EdgeInsets.only(top:MediaQuery.of(context).size.height * 0.02,)),
           Container(
             child: SizedBox(
               width: 300,
-              height: MediaQuery.of(context.size.height * 0.05),
+                            height: MediaQuery.of(context).size.height * 0.07,
+              // height: MediaQuery.of(context.size.height * 0.05),
               child: TextField(
                 controller: FourAnswerController,
                 style: TextStyle(
@@ -228,7 +230,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
                 color: Color.fromARGB(250, 86, 94, 205)),
             child: SizedBox(
                 width: 220,
-                height: 57,
+                height: MediaQuery.of(context).size.height * 0.07,
                 child: DropdownButton<String>(
                     value: CorrectAnswerController,
                     isExpanded: true,
@@ -273,91 +275,127 @@ class _CreateQuestionState extends State<CreateQuestion> {
                     )),
                     ),
           ),
-          Padding(padding: EdgeInsets.only(top: 40)),
+          Padding(padding: EdgeInsets.only(top:MediaQuery.of(context).size.height * 0.02,)),
             ],
+ 
           ),
           ),
                     Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                border: Border.all(
-                  color: Color.fromARGB(250, 132, 199, 110),
-                  width: 5,
+            child:  Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_circle_left),
+                    iconSize: 80,
+                    color: Color.fromARGB(250, 132, 199, 110),
+                    onPressed: () {
+
+                        if (quesIndex == 1) {
+                        } else {
+                          setState(() {
+                            quesIndex = quesIndex - 1;
+                            discriptionController.text = activeQuiz.questions[quesIndex-1].discription!;
+                            FirstAnswerController.text = activeQuiz.questions[quesIndex-1].answerOne!;
+                            SecondAnswerController.text = activeQuiz.questions[quesIndex-1].answerTwo!;
+                            ThreeAnswerController.text = activeQuiz.questions[quesIndex-1].answerThree!;
+                            FourAnswerController.text = activeQuiz.questions[quesIndex-1].answerFour!;
+                          });
+
+                        }
+
+                      }
+                    
+                  ),
                 ),
-                color: Color.fromARGB(250, 93, 108, 215)),
-            child: SizedBox(
-              child: IconButton(
-                icon: Icon(Icons.add),
-                iconSize: 80,
-                color: Color.fromARGB(250, 132, 199, 110),
-                onPressed: () {
-                  if (discriptionController.text != "" &&
-                      FirstAnswerController.text != "" &&
-                      SecondAnswerController.text != "" &&
-                      ThreeAnswerController.text != "" &&
-                      FourAnswerController.text != "" &&
-                      CorrectAnswerController != "") {
-                    if (CorrectAnswerController == "Вариант 1") {
-                      activeQuiz.questions.add(new Question(
-                          discription: discriptionController.text,
-                          answerOne: FirstAnswerController.text,
-                          answerTwo: SecondAnswerController.text,
-                          answerThree: ThreeAnswerController.text,
-                          answerFour: FourAnswerController.text,
-                          correctanswer: FirstAnswerController.text));
-                    } else if (CorrectAnswerController == "Вариант 2") {
-                      activeQuiz.questions.add(new Question(
-                          discription: discriptionController.text,
-                          answerOne: FirstAnswerController.text,
-                          answerTwo: SecondAnswerController.text,
-                          answerThree: ThreeAnswerController.text,
-                          answerFour: FourAnswerController.text,
-                          correctanswer: SecondAnswerController.text));
-                    } else if (CorrectAnswerController == "Вариант 3") {
-                      activeQuiz.questions.add(new Question(
-                          discription: discriptionController.text,
-                          answerOne: FirstAnswerController.text,
-                          answerTwo: SecondAnswerController.text,
-                          answerThree: ThreeAnswerController.text,
-                          answerFour: FourAnswerController.text,
-                          correctanswer: ThreeAnswerController.text));
-                    } else if (CorrectAnswerController == "Вариант 4") {
-                      activeQuiz.questions.add(new Question(
-                          discription: discriptionController.text,
-                          answerOne: FirstAnswerController.text,
-                          answerTwo: SecondAnswerController.text,
-                          answerThree: ThreeAnswerController.text,
-                          answerFour: FourAnswerController.text,
-                          correctanswer: FourAnswerController.text));
-                    }
-                    if (quesIndex == questionsCount) {
-                      FirebaseFirestore.instance
-                          .collection('quizs')
-                          .doc()
-                          .set({
-                        'name': activeQuiz.Name,
-                        'userLogin': activeQuiz.UserLogin,
-                        "category": activeQuiz.Category,
-                        "difficult": activeQuiz.Difficult,
-                        "questions":
-                            FieldValue.arrayUnion(activeQuiz.questions.map<Map>((e)=> e.toMap()).toList()),
-                      });
-                      Navigator.pushNamed(context, '/mainPage');
-                    } else {
-                      setState(() {
-                        quesIndex = quesIndex! + 1;
-                        discriptionController.text = "";
-                        FirstAnswerController.text = "";
-                        SecondAnswerController.text = "";
-                        ThreeAnswerController.text = "";
-                        FourAnswerController.text = "";
-                      });
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  child: IconButton(
+                    icon: Icon(Icons.arrow_circle_right),
+                    iconSize: 80,
+                    color: Color.fromARGB(250, 132, 199, 110),
+                    onPressed: () {
 
-                    }
+                      if (discriptionController.text != "" &&
+                          FirstAnswerController.text != "" &&
+                          SecondAnswerController.text != "" &&
+                          ThreeAnswerController.text != "" &&
+                          FourAnswerController.text != "" &&
+                          CorrectAnswerController != "") {
+                            if(activeQuiz.questions.length == quesIndex-1){
+                                 activeQuiz.questions.add(new Question(
+                              discription: "",
+                              answerOne: "",
+                              answerTwo: "",
+                              answerThree: "",
+                              answerFour: "",
+                              correctanswer: ""));
+                            }
+                        if (CorrectAnswerController == "Вариант 1") {
+                          activeQuiz.questions[quesIndex-1] = (new Question(
+                              discription: discriptionController.text,
+                              answerOne: FirstAnswerController.text,
+                              answerTwo: SecondAnswerController.text,
+                              answerThree: ThreeAnswerController.text,
+                              answerFour: FourAnswerController.text,
+                              correctanswer: FirstAnswerController.text));
+                        } else if (CorrectAnswerController == "Вариант 2") {
+                          activeQuiz.questions[quesIndex-1] =(new Question(
+                              discription: discriptionController.text,
+                              answerOne: FirstAnswerController.text,
+                              answerTwo: SecondAnswerController.text,
+                              answerThree: ThreeAnswerController.text,
+                              answerFour: FourAnswerController.text,
+                              correctanswer: SecondAnswerController.text));
+                        } else if (CorrectAnswerController == "Вариант 3") {
+                          activeQuiz.questions[quesIndex-1] =(new Question(
+                              discription: discriptionController.text,
+                              answerOne: FirstAnswerController.text,
+                              answerTwo: SecondAnswerController.text,
+                              answerThree: ThreeAnswerController.text,
+                              answerFour: FourAnswerController.text,
+                              correctanswer: ThreeAnswerController.text));
+                        } else if (CorrectAnswerController == "Вариант 4") {
+                          activeQuiz.questions[quesIndex-1] =(new Question(
+                              discription: discriptionController.text,
+                              answerOne: FirstAnswerController.text,
+                              answerTwo: SecondAnswerController.text,
+                              answerThree: ThreeAnswerController.text,
+                              answerFour: FourAnswerController.text,
+                              correctanswer: FourAnswerController.text));
+                        }
+                        if (quesIndex == questionsCount) {
+                          FirebaseFirestore.instance
+                              .collection('quizs')
+                              .doc()
+                              .set({
+                            'name': activeQuiz.Name,
+                            'userLogin': activeQuiz.UserLogin,
+                            "category": activeQuiz.Category,
+                            "difficult": activeQuiz.Difficult,
+                            "questions":
+                                FieldValue.arrayUnion(activeQuiz.questions.map<Map>((e)=> e.toMap()).toList()),
+                          });
+                          Navigator.pushNamed(context, '/mainPage');
+                        } else {
+                          setState(() {
+                            quesIndex = quesIndex + 1;
+                            discriptionController.text = "";
+                            FirstAnswerController.text = "";
+                            SecondAnswerController.text = "";
+                            ThreeAnswerController.text = "";
+                            FourAnswerController.text = "";
+                          });
 
-                  }
-                },
-              ),
+                        }
+
+                      }
+                    },
+                  ),
+                ),
+                
+              ],
             ),
           ),
 
