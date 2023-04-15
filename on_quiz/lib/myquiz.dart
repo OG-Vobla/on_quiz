@@ -6,6 +6,7 @@ import 'package:on_quiz/quizClass.dart';
 
 import 'createQuestion.dart';
 import 'createQuizPage.dart';
+import 'editQuizName.dart';
 
 class MyQuizPage extends StatelessWidget {
   const MyQuizPage({super.key});
@@ -22,11 +23,12 @@ class MyQuizPage extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.data?.docs.length == 0 || !snapshot.hasData) {
           return Text(
-            "Нет Записей",
+            "Нет записей",
             style: TextStyle(
-                color: Colors.black,
-                fontFamily: "IMFellGreatPrimerSC-Regular",
-                fontSize: 20),
+              color: Colors.white,
+              fontFamily: "OpenSans-SemiBold",
+              fontSize: 22,
+            ),
           );
         } else {
           return ListView.builder(
@@ -82,20 +84,17 @@ class MyQuizPage extends StatelessWidget {
                               ? answersList[2]
                               : answersList[3]);
                   questionsCount = activeQuiz.questions.length;
-                  Navigator.pushNamed(context, '/createQuestion').then(
-                      (value) => FirebaseFirestore.instance
-                              .collection('quizs')
-                              .doc(snapshot.data?.docs[index].id)
-                              .set({
-                            'name': activeQuiz.Name,
-                            'userLogin': activeQuiz.UserLogin,
-                            "category": activeQuiz.Category,
-                            "difficult": activeQuiz.Difficult,
-                            "questions": FieldValue.arrayUnion(activeQuiz
-                                .questions
-                                .map<Map>((e) => e.toMap())
-                                .toList()),
-                          }));
+                  activeQuizId = snapshot.data?.docs[index].id;
+                  nameQuiz = activeQuiz.Name;
+                  editCategoryValue = activeQuiz.Category!;
+                  loginUser = activeQuiz.UserLogin;
+
+                  countQuestions = activeQuiz.questions.length.toString();
+                  quesEditCountController.text = countQuestions!;
+                  nameEditController.text = nameQuiz!;
+                  Navigator.pushNamed(context, '/editQuizName').then(
+                    (value) {},
+                  );
                 },
                 child: new Card(
                   shape: RoundedRectangleBorder(
@@ -189,3 +188,6 @@ class MyQuizPage extends StatelessWidget {
     );
   }
 }
+
+bool isDelete = false;
+String? activeQuizId = "";

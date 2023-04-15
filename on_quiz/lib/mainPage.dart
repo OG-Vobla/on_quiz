@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:on_quiz/myquiz.dart';
 import 'package:on_quiz/quizClass.dart';
 import 'QuizGame.dart';
+import 'quizsPage.dart';
 import 'createQuizPage.dart';
 
 class MainPage extends StatefulWidget {
@@ -73,12 +75,13 @@ class StateMainPage extends State<MainPage> {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data?.docs.length == 0 || !snapshot.hasData) {
             return Text(
-              "Нет Записей",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: "IMFellGreatPrimerSC-Regular",
-                  fontSize: 20),
-            );
+            "Нет записей",
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: "OpenSans-SemiBold",
+              fontSize: 22,
+            ),
+          );
           } else {
             return ListView.builder(
               itemCount: snapshot.data?.docs.length,
@@ -323,20 +326,22 @@ class StateMainPage extends State<MainPage> {
                     fontSize: MediaQuery.of(context).size.height * 0.011),
                 showUnselectedLabels: true,
                 currentIndex: selectedIndex,
-                items: const [
+                items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.people_outline_outlined, size: 35),
+                    icon: Icon(Icons.people_outline_outlined,
+                        size: MediaQuery.of(context).size.height * 0.045),
                     label: 'Онлайн викторины',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.add,
-                      size: (35),
+                      size: (MediaQuery.of(context).size.height * 0.045),
                     ),
                     label: 'Создать викторину',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline_outlined, size: 35),
+                    icon: Icon(Icons.person_outline_outlined,
+                        size: MediaQuery.of(context).size.height * 0.045),
                     label: 'Мои викторины',
                   ),
                 ],

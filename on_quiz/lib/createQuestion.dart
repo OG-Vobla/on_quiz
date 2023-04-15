@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:on_quiz/createQuizPage.dart';
+import 'package:on_quiz/myquiz.dart';
 import 'package:on_quiz/quizClass.dart';
 
 class CreateQuestion extends StatefulWidget {
@@ -388,6 +390,37 @@ class _CreateQuestionState extends State<CreateQuestion> {
                           }
 
                           if (quesIndex + 1 == questionsCount) {
+                            if(isEdit){
+FirebaseFirestore.instance
+                              .collection('quizs')
+                              .doc(activeQuizId)
+                              .set({
+                            'name': activeQuiz.Name,
+                            'userLogin': activeQuiz.UserLogin,
+                            "category": activeQuiz.Category,
+                            "difficult": activeQuiz.Difficult,
+                            "questions": FieldValue.arrayUnion(activeQuiz
+                                .questions
+                                .map<Map>((e) => e.toMap())
+                                .toList()),
+                          });
+                            }
+                            else{
+                               FirebaseFirestore.instance
+                                .collection('quizs')
+                                .doc()
+                                .set({
+                              'name': activeQuiz.Name,
+                              'userLogin': activeQuiz.UserLogin,
+                              "category": activeQuiz.Category,
+                              "difficult": activeQuiz.Difficult,
+                              "questions": FieldValue.arrayUnion(activeQuiz
+                                  .questions
+                                  .map<Map>((e) => e.toMap())
+                                  .toList()),
+                            });
+                            }
+                             
                             Navigator.popAndPushNamed(context, '/mainPage');
                           } else {
                             setState(() {

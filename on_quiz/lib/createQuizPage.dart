@@ -305,20 +305,9 @@ class _MyWidgetState extends State<CreateQuizPage> {
                                         .toString()
                                 ? answersList[2]
                                 : answersList[3]);
-                    Navigator.pushNamed(context, "/createQuestion").then(
-                        (value) => FirebaseFirestore.instance
-                                .collection('quizs')
-                                .doc()
-                                .set({
-                              'name': activeQuiz.Name,
-                              'userLogin': activeQuiz.UserLogin,
-                              "category": activeQuiz.Category,
-                              "difficult": activeQuiz.Difficult,
-                              "questions": FieldValue.arrayUnion(activeQuiz
-                                  .questions
-                                  .map<Map>((e) => e.toMap())
-                                  .toList()),
-                            }));
+                                isEdit = false;
+                    Navigator.pushNamed(context, "/createQuestion");
+
                   }
                 },
               ),
@@ -329,7 +318,7 @@ class _MyWidgetState extends State<CreateQuizPage> {
     );
   }
 }
-
+bool isEdit  = false;
 int quesIndex = 0;
 int? questionsCount;
 Quiz activeQuiz =
