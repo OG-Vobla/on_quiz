@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:on_quiz/createQuizPage.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -9,238 +12,271 @@ class GamePage extends StatefulWidget {
   State<GamePage> createState() => _MyWidgetState();
 }
 
+bool canEdit = true;
+List<Color> colors = [
+  Color.fromARGB(250, 86, 94, 205),
+  Color.fromARGB(211, 234, 40, 40),
+  Color.fromARGB(210, 66, 234, 40)
+];
+List<Color> btnColors = [
+  Color.fromARGB(250, 86, 94, 205),
+  Color.fromARGB(250, 86, 94, 205),
+  Color.fromARGB(250, 86, 94, 205),
+  Color.fromARGB(250, 86, 94, 205)
+];
+int indexColor = 0;
+
 class _MyWidgetState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
+    void checkColor(int num) {
+      setState(() {
+        indexColor = num;
+      });
+    }
+
+    bool isCorrrect(String value) {
+      if (activeQuiz.questions[quesIndex].correctanswer.toString() ==
+          activeQuiz.questions[quesIndex].answerOne.toString()) {
+        btnColors[0] = colors[2];
+      } else if (activeQuiz.questions[quesIndex].correctanswer.toString() ==
+          activeQuiz.questions[quesIndex].answerTwo.toString()) {
+        btnColors[1] = colors[2];
+      } else if (activeQuiz.questions[quesIndex].correctanswer.toString() ==
+          activeQuiz.questions[quesIndex].answerThree.toString()) {
+        btnColors[2] = colors[2];
+      } else if (activeQuiz.questions[quesIndex].correctanswer.toString() ==
+          activeQuiz.questions[quesIndex].answerFour.toString()) {
+        btnColors[3] = colors[2];
+      }
+      if (value == activeQuiz.questions[quesIndex].correctanswer.toString()) {
+        checkColor(2);
+        return true;
+      } else {
+        checkColor(1);
+        return false;
+      }
+    }
+
+    void goNext() {
+      canEdit = false;
+      Timer(Duration(seconds: 2), () {
+        setState(() {
+          if (quesIndex == activeQuiz.questions.length - 1) {
+            Navigator.popAndPushNamed(context, '/mainPage');
+          } else {
+            quesIndex++;
+          }
+           btnColors = [
+  Color.fromARGB(250, 86, 94, 205),
+  Color.fromARGB(250, 86, 94, 205),
+  Color.fromARGB(250, 86, 94, 205),
+  Color.fromARGB(250, 86, 94, 205)
+];
+ indexColor = 0;
+      canEdit = true;
+        });
+      });
+    }
+
     return Scaffold(
         backgroundColor: Color.fromARGB(250, 93, 108, 215),
-        body: Center(
-            child: Column(children: <Widget>[
-          Padding(padding: EdgeInsets.only(top: 70)),
-          Container(
-            child: SizedBox(
-              width: 350,
-              height: MediaQuery.of(context).size.height * 0.2,
-              child: TextField(
-                keyboardType: TextInputType.multiline,
-                minLines: 1,
-                maxLines: 4,
-                style: TextStyle(
+        body: SingleChildScrollView(
+          child: Center(
+              child: Column(children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.04,
+            )),
+            Text(
+              "Вопрос " + (quesIndex + 1).toString(),
+              style: TextStyle(
                   color: Colors.white,
                   fontFamily: "OpenSans-SemiBold",
-                  fontSize: 22,
+                  fontSize: 22),
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.03,
+            )),
+            SizedBox(
+              width: 350,
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(250, 86, 94, 205),
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
-                cursorColor: Colors.white,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                        width: 0, color: Color.fromARGB(250, 86, 94, 205)),
+                alignment: Alignment.center,
+                child: Text(
+                  activeQuiz.questions[quesIndex].discription.toString(),
+                  maxLines: 4,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "OpenSans-SemiBold",
+                    fontSize: 22,
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                        width: 0, color: Color.fromARGB(250, 93, 108, 215)),
-                  ),
-                  filled: true,
-                  hintText: "Вопроc ",
-                  fillColor: Color.fromARGB(250, 86, 94, 205),
-                  hintStyle: TextStyle(
-                      color: Color.fromARGB(250, 250, 250, 250),
-                      fontFamily: "OpenSans-SemiBold",
-                      fontSize: 22),
                 ),
               ),
             ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.02,
-          )),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.5,
-            child: Column(
-              children: [
-                Container(
-                  child: SizedBox(
-                    width: 300,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    child: TextField(
-                      style: TextStyle(
-                          color: Color.fromARGB(250, 250, 250, 250),
-                          fontFamily: "OpenSans-SemiBold",
-                          fontSize: 22),
-                      cursorColor: Color.fromARGB(250, 250, 250, 250),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20, 20, 10, 0),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              width: 0,
-                              color: Color.fromARGB(250, 93, 108, 215)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              width: 0,
-                              color: Color.fromARGB(250, 93, 108, 215)),
-                        ),
-                        filled: true,
-                        hintText: "Вариант 1",
-                        fillColor: Color.fromARGB(250, 86, 94, 205),
-                        hintStyle: TextStyle(
-                            color: Color.fromARGB(250, 250, 250, 250),
-                            fontFamily: "OpenSans-SemiBold",
-                            fontSize: 22),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.02,
-                )),
-                Container(
-                  child: SizedBox(
-                    width: 300,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    child: TextField(
-                      style: TextStyle(
-                          color: Color.fromARGB(250, 250, 250, 250),
-                          fontFamily: "OpenSans-SemiBold",
-                          fontSize: 22),
-                      cursorColor: Color.fromARGB(250, 250, 250, 250),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20, 20, 10, 0),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              width: 0,
-                              color: Color.fromARGB(250, 93, 108, 215)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              width: 0,
-                              color: Color.fromARGB(250, 93, 108, 215)),
-                        ),
-                        filled: true,
-                        hintText: "Вариант 2",
-                        fillColor: Color.fromARGB(250, 86, 94, 205),
-                        hintStyle: TextStyle(
-                            color: Color.fromARGB(250, 250, 250, 250),
-                            fontFamily: "OpenSans-SemiBold",
-                            fontSize: 22),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.02,
-                )),
-                Container(
-                  child: SizedBox(
-                    width: 300,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    child: TextField(
-                      style: TextStyle(
-                          color: Color.fromARGB(250, 250, 250, 250),
-                          fontFamily: "OpenSans-SemiBold",
-                          fontSize: 22),
-                      cursorColor: Color.fromARGB(250, 250, 250, 250),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20, 20, 10, 0),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              width: 0,
-                              color: Color.fromARGB(250, 93, 108, 215)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              width: 0,
-                              color: Color.fromARGB(250, 93, 108, 215)),
-                        ),
-                        filled: true,
-                        hintText: "Вариант 3",
-                        fillColor: Color.fromARGB(250, 86, 94, 205),
-                        hintStyle: TextStyle(
-                            color: Color.fromARGB(250, 250, 250, 250),
-                            fontFamily: "OpenSans-SemiBold",
-                            fontSize: 22),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.02,
-                )),
-                Container(
-                  child: SizedBox(
-                    width: 300,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    // height: MediaQuery.of(context.size.height * 0.05),
-                    child: TextField(
-                      style: TextStyle(
-                          color: Color.fromARGB(250, 250, 250, 250),
-                          fontFamily: "OpenSans-SemiBold",
-                          fontSize: 22),
-                      cursorColor: Color.fromARGB(250, 250, 250, 250),
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(20, 20, 10, 0),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              width: 0,
-                              color: Color.fromARGB(250, 93, 108, 215)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                          borderSide: BorderSide(
-                              width: 0,
-                              color: Color.fromARGB(250, 93, 108, 215)),
-                        ),
-                        filled: true,
-                        hintText: "Вариант 4",
-                        fillColor: Color.fromARGB(250, 86, 94, 205),
-                        hintStyle: TextStyle(
-                            color: Color.fromARGB(250, 250, 250, 250),
-                            fontFamily: "OpenSans-SemiBold",
-                            fontSize: 22),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.02,
-                )),
-              ],
-            ),
-          ),
-          Container(
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Padding(
+                padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * 0.02,
+            )),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: IconButton(
-                  icon: Icon(Icons.arrow_circle_left),
-                  iconSize: 80,
-                  color: Color.fromARGB(250, 132, 199, 110),
-                  onPressed: () {}),
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Column(
+                children: [
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (canEdit) {
+                          if (isCorrrect(activeQuiz
+                              .questions[quesIndex].answerOne
+                              .toString())) {
+                            print('object');
+                          }
+                          setState(() {
+                            btnColors[0] = colors[indexColor];
+                          });
+                          goNext();
+                        }
+                      },
+                      child: Text(
+                        activeQuiz.questions[quesIndex].answerOne.toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "OpenSans-SemiBold",
+                            fontSize: 22),
+                      ),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(btnColors[0]),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ))),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    width: 300,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.02,
+                  )),
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (canEdit) {
+                          if (isCorrrect(activeQuiz
+                              .questions[quesIndex].answerTwo
+                              .toString())) {}
+                          setState(() {
+                            btnColors[1] = colors[indexColor];
+                          });
+                          goNext();
+                        }
+                      },
+                      child: Text(
+                        activeQuiz.questions[quesIndex].answerTwo.toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "OpenSans-SemiBold",
+                            fontSize: 22),
+                      ),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(btnColors[1]),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ))),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    width: 300,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.02,
+                  )),
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (canEdit) {
+                          if (isCorrrect(activeQuiz
+                              .questions[quesIndex].answerThree
+                              .toString())) {}
+                          setState(() {
+                            btnColors[2] = colors[indexColor];
+                          });
+                          goNext();
+                        }
+                      },
+                      child: Text(
+                        activeQuiz.questions[quesIndex].answerThree.toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "OpenSans-SemiBold",
+                            fontSize: 22),
+                      ),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(btnColors[2]),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ))),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    width: 300,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.02,
+                  )),
+                  Container(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (canEdit) {
+                          if (isCorrrect(activeQuiz
+                              .questions[quesIndex].answerFour
+                              .toString())) {}
+                          setState(() {
+                            btnColors[3] = colors[indexColor];
+                          });
+                          goNext();
+                        }
+                      },
+                      child: Text(
+                        activeQuiz.questions[quesIndex].answerFour.toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "OpenSans-SemiBold",
+                            fontSize: 22),
+                      ),
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(btnColors[3]),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ))),
+                    ),
+                    height: MediaQuery.of(context).size.height * 0.07,
+                    width: 300,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.02,
+                  )),
+                ],
+              ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.15,
-              child: IconButton(
-                  icon: Icon(Icons.arrow_circle_right),
-                  iconSize: 80,
-                  color: Color.fromARGB(250, 132, 199, 110),
-                  onPressed: () {}),
-            )
-          ]))
-        ])));
+          ])),
+        ));
   }
 }

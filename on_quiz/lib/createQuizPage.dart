@@ -9,6 +9,8 @@ import 'package:on_quiz/registrationPage.dart';
 import 'package:on_quiz/services/model.dart';
 import 'package:on_quiz/services/services.dart';
 
+import 'createQuestion.dart';
+
 const List<String> categoryList = <String>[
   'Наука',
   'Биология',
@@ -251,15 +253,8 @@ class _MyWidgetState extends State<CreateQuizPage> {
                 iconSize: MediaQuery.of(context).size.height * 0.1,
                 color: Color.fromARGB(250, 132, 199, 110),
                 onPressed: () async {
-                  String? Login = "";
-                  QuerySnapshot querySnapshot = await users.get();
-                  final allData =
-                      querySnapshot.docs.map((doc) => doc.data()).toList();
-                  for (int i = 0; i < allData.length; i++) {
-                    if (querySnapshot.docs[i].get('id') == curUser?.id) {
-                      Login = querySnapshot.docs[i].get('Login');
-                    }
-                  }
+                  String? Login = userLogin;
+                  
                   if (categoryValue != null &&
                       complexity != null &&
                       nameController.text != "") {
@@ -269,8 +264,42 @@ class _MyWidgetState extends State<CreateQuizPage> {
                         Category: categoryValue,
                         Name: nameController.text,
                         Difficult: complexity);
-                    quesIndex = 1;
-                    Navigator.pushNamed(context, "/createQuestion");
+                        activeQuiz.questions.add(new Question(discription: "", answerFour: "", answerOne: "", answerThree: "", answerTwo: "", correctanswer: ""));
+                    quesIndex = 0;
+                    discriptionController.text =
+        activeQuiz.questions[quesIndex].discription.toString();
+    FirstAnswerController.text =
+        activeQuiz.questions[quesIndex].answerOne.toString();
+    SecondAnswerController.text =
+        activeQuiz.questions[quesIndex].answerTwo.toString();
+    ThreeAnswerController.text =
+        activeQuiz.questions[quesIndex].answerThree.toString();
+    FourAnswerController.text =
+        activeQuiz.questions[quesIndex].answerFour.toString();
+    CorrectAnswerController =
+        (activeQuiz.questions[quesIndex].correctanswer.toString() ==
+                activeQuiz.questions[quesIndex].answerOne.toString()
+            ? answersList[0]
+            : activeQuiz.questions[quesIndex].correctanswer.toString() ==
+                    activeQuiz.questions[quesIndex].answerTwo.toString()
+                ? answersList[1]
+                : activeQuiz.questions[quesIndex].correctanswer.toString() ==
+                        activeQuiz.questions[quesIndex].answerThree.toString()
+                    ? answersList[2]
+                    : answersList[3]);
+                    Navigator.pushNamed(context, "/createQuestion").then((value) =>                             FirebaseFirestore.instance
+                                .collection('quizs')
+                                .doc()
+                                .set({
+                              'name': activeQuiz.Name,
+                              'userLogin': activeQuiz.UserLogin,
+                              "category": activeQuiz.Category,
+                              "difficult": activeQuiz.Difficult,
+                              "questions": FieldValue.arrayUnion(activeQuiz
+                                  .questions
+                                  .map<Map>((e) => e.toMap())
+                                  .toList()),
+                            }));
                   }
                 },
               ),
@@ -281,7 +310,6 @@ class _MyWidgetState extends State<CreateQuizPage> {
     );
   }
 }
-
 int quesIndex = 0;
 int? questionsCount;
 Quiz activeQuiz =

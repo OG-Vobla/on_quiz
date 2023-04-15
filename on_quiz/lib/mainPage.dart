@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:on_quiz/myquiz.dart';
+import 'package:on_quiz/quizClass.dart';
+import 'QuizGame.dart';
 import 'quizsPage.dart';
 import 'createQuizPage.dart';
 
@@ -84,11 +86,39 @@ class StateMainPage extends State<MainPage> {
               itemCount: snapshot.data?.docs.length,
               itemBuilder: (BuildContext context, int index) {
                 GestureDetector card = GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/quizgame');
+                  onTap: () async {
+                    quesIndex = 0;
+                    activeQuiz = new Quiz(
+                        Category: snapshot.data?.docs[index].get('category'),
+                        Difficult: snapshot.data?.docs[index].get('difficult'),
+                        Name: snapshot.data?.docs[index].get('name'),
+                        UserLogin: snapshot.data?.docs[index].get('userLogin'));
+                    List<Question> quess = [];
+                    List<dynamic> sdf =
+                        snapshot.data?.docs[index].get('questions');
+                    final List<Map<String, dynamic>> fooData =
+                        List.from(sdf.where((x) => x is Map));
+                    for (var element in fooData) {
+                      quess.add(Question(
+                          discription: element['discription'],
+                          answerFour: element['answerFour'],
+                          answerOne: element['answerOne'],
+                          answerThree: element['answerThree'],
+                          answerTwo: element['answerTwo'],
+                          correctanswer: element['correctanswer']));
+                    }
+                    activeQuiz.questions = quess;
+                    Navigator.pushNamed(context, '/quizgame').then((value) {
+                      btnColors = [
+                        Color.fromARGB(250, 86, 94, 205),
+                        Color.fromARGB(250, 86, 94, 205),
+                        Color.fromARGB(250, 86, 94, 205),
+                        Color.fromARGB(250, 86, 94, 205)
+                      ];
+                      indexColor = 0;
+                    });
                   },
                   child: new Card(
-                    
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                         side: const BorderSide(
@@ -127,8 +157,11 @@ class StateMainPage extends State<MainPage> {
                                             ? (Row(
                                                 children: [icon, icon],
                                               ))
-                                            : Row(
-                                                children: [icon, icon, icon])))))
+                                            : Row(children: [
+                                                icon,
+                                                icon,
+                                                icon
+                                              ])))))
                           ],
                         ),
                         Row(
@@ -188,7 +221,6 @@ class StateMainPage extends State<MainPage> {
       const MyQuizPage(),
     ];
     AppBar appBarSearch = AppBar(
-
       automaticallyImplyLeading: false,
       iconTheme: IconThemeData(
         color: Color.fromARGB(255, 145, 135, 206), //change your color here
@@ -301,7 +333,7 @@ class StateMainPage extends State<MainPage> {
                   BottomNavigationBarItem(
                     icon: Icon(
                       Icons.add,
-                      size: 35,
+                      size: (35),
                     ),
                     label: 'Создать викторину',
                   ),

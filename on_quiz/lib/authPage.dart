@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:on_quiz/createQuizPage.dart';
 import 'package:on_quiz/registrationPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -49,8 +50,10 @@ class _MyAuthPageState extends State<AuthPage> {
             children: [
               Column(
                 children: <Widget>[
-                  
-          Padding(padding: EdgeInsets.only(top:MediaQuery.of(context).size.height * 0.1,)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.1,
+                  )),
                   Image.asset(
                     'assets/ques_icon.png',
                     width: MediaQuery.of(context).size.height * 0.15,
@@ -65,7 +68,9 @@ class _MyAuthPageState extends State<AuthPage> {
                         fontFamily: "OpenSans-SemiBold",
                         fontSize: 24),
                   ),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.03)),
                   isError
                       ? Container(
                           width: 300,
@@ -83,7 +88,9 @@ class _MyAuthPageState extends State<AuthPage> {
                           ),
                         )
                       : Container(),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.002)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.002)),
                   Text(
                     "Авторизация",
                     style: TextStyle(
@@ -91,11 +98,13 @@ class _MyAuthPageState extends State<AuthPage> {
                         fontFamily: "OpenSans-SemiBold",
                         fontSize: 32),
                   ),
-                  Padding(padding: EdgeInsets.only(top:  MediaQuery.of(context).size.height * 0.02)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02)),
                   Container(
                     child: SizedBox(
                       width: 246,
-                      height:  MediaQuery.of(context).size.height * 0.07,
+                      height: MediaQuery.of(context).size.height * 0.07,
                       child: TextField(
                         style: TextStyle(
                             color: Color.fromARGB(200, 40, 49, 73),
@@ -128,11 +137,13 @@ class _MyAuthPageState extends State<AuthPage> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top:  MediaQuery.of(context).size.height * 0.02)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02)),
                   Container(
                     child: SizedBox(
                       width: 246,
-                      height:  MediaQuery.of(context).size.height * 0.07,
+                      height: MediaQuery.of(context).size.height * 0.07,
                       child: TextField(
                         controller: Password,
                         style: TextStyle(
@@ -165,7 +176,9 @@ class _MyAuthPageState extends State<AuthPage> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top:  MediaQuery.of(context).size.height * 0.07)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.07)),
                   Container(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -176,6 +189,17 @@ class _MyAuthPageState extends State<AuthPage> {
                                   Email.text, Password.text);
                               if (user != null) {
                                 curUser = user;
+                                QuerySnapshot querySnapshot = await users.get();
+                                final allData = querySnapshot.docs
+                                    .map((doc) => doc.data())
+                                    .toList();
+                                for (int i = 0; i < allData.length; i++) {
+                                  if (querySnapshot.docs[i].get('id') ==
+                                      user.id) {
+                                    userLogin =
+                                        querySnapshot.docs[i].get('Login');
+                                  }
+                                }
                                 Navigator.pushNamed(context, '/mainPage');
                               } else {
                                 setState(() {
@@ -218,7 +242,7 @@ class _MyAuthPageState extends State<AuthPage> {
                             borderRadius: BorderRadius.circular(20.0),
                           ))),
                     ),
-                    height:  MediaQuery.of(context).size.height * 0.045,
+                    height: MediaQuery.of(context).size.height * 0.045,
                     width: 100,
                   ),
                 ],
@@ -226,7 +250,9 @@ class _MyAuthPageState extends State<AuthPage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(padding: EdgeInsets.only(top:  MediaQuery.of(context).size.height * 0.02)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02)),
                   InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, '/regPage');
@@ -249,4 +275,7 @@ class _MyAuthPageState extends State<AuthPage> {
     );
   }
 }
-UserModel? curUser ;
+
+UserModel? curUser;
+
+String userLogin = "";
