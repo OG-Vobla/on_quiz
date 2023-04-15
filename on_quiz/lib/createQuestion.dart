@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -35,7 +34,6 @@ List<String?> answersList = [
 class _CreateQuestionState extends State<CreateQuestion> {
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
         backgroundColor: Color.fromARGB(250, 93, 108, 215),
         body: SingleChildScrollView(
@@ -69,7 +67,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
                           width: 0, color: Color.fromARGB(250, 93, 108, 215)),
                     ),
                     filled: true,
-                    hintText: "Вопроc " + (quesIndex+ 1).toString() + "...",
+                    hintText: "Вопроc " + (quesIndex + 1).toString() + "...",
                     fillColor: Color.fromARGB(250, 86, 94, 205),
                     hintStyle: TextStyle(
                         color: Color.fromARGB(250, 250, 250, 250),
@@ -388,34 +386,48 @@ class _CreateQuestionState extends State<CreateQuestion> {
                                 answerFour: FourAnswerController.text,
                                 correctanswer: FourAnswerController.text));
                           }
-                          
-                          if (quesIndex + 1 == questionsCount) {
 
+                          if (quesIndex + 1 == questionsCount) {
                             Navigator.popAndPushNamed(context, '/mainPage');
                           } else {
                             setState(() {
                               quesIndex = quesIndex + 1;
-                              discriptionController.text =
-        activeQuiz.questions[quesIndex].discription.toString();
-    FirstAnswerController.text =
-        activeQuiz.questions[quesIndex].answerOne.toString();
-    SecondAnswerController.text =
-        activeQuiz.questions[quesIndex].answerTwo.toString();
-    ThreeAnswerController.text =
-        activeQuiz.questions[quesIndex].answerThree.toString();
-    FourAnswerController.text =
-        activeQuiz.questions[quesIndex].answerFour.toString();
-    CorrectAnswerController =
-        (activeQuiz.questions[quesIndex].correctanswer.toString() ==
-                activeQuiz.questions[quesIndex].answerOne.toString()
-            ? answersList[0]
-            : activeQuiz.questions[quesIndex].correctanswer.toString() ==
-                    activeQuiz.questions[quesIndex].answerTwo.toString()
-                ? answersList[1]
-                : activeQuiz.questions[quesIndex].correctanswer.toString() ==
-                        activeQuiz.questions[quesIndex].answerThree.toString()
-                    ? answersList[2]
-                    : answersList[3]);
+                              discriptionController.text = activeQuiz
+                                  .questions[quesIndex].discription
+                                  .toString();
+                              FirstAnswerController.text = activeQuiz
+                                  .questions[quesIndex].answerOne
+                                  .toString();
+                              SecondAnswerController.text = activeQuiz
+                                  .questions[quesIndex].answerTwo
+                                  .toString();
+                              ThreeAnswerController.text = activeQuiz
+                                  .questions[quesIndex].answerThree
+                                  .toString();
+                              FourAnswerController.text = activeQuiz
+                                  .questions[quesIndex].answerFour
+                                  .toString();
+                              CorrectAnswerController = (activeQuiz
+                                          .questions[quesIndex].correctanswer
+                                          .toString() ==
+                                      activeQuiz.questions[quesIndex].answerOne
+                                          .toString()
+                                  ? answersList[0]
+                                  : activeQuiz.questions[quesIndex]
+                                              .correctanswer
+                                              .toString() ==
+                                          activeQuiz
+                                              .questions[quesIndex].answerTwo
+                                              .toString()
+                                      ? answersList[1]
+                                      : activeQuiz.questions[quesIndex]
+                                                  .correctanswer
+                                                  .toString() ==
+                                              activeQuiz.questions[quesIndex]
+                                                  .answerThree
+                                                  .toString()
+                                          ? answersList[2]
+                                          : answersList[3]);
                             });
                           }
                         }

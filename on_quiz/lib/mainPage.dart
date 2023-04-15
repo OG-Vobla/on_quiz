@@ -4,11 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
 import 'package:on_quiz/myquiz.dart';
 import 'package:on_quiz/quizClass.dart';
 import 'QuizGame.dart';
-import 'quizsPage.dart';
 import 'createQuizPage.dart';
 
 class MainPage extends StatefulWidget {
@@ -108,7 +106,7 @@ class StateMainPage extends State<MainPage> {
                           correctanswer: element['correctanswer']));
                     }
                     activeQuiz.questions = quess;
-                    Navigator.pushNamed(context, '/quizgame').then((value) {
+                    Navigator.pushNamed(context, '/startgame').then((value) {
                       btnColors = [
                         Color.fromARGB(250, 86, 94, 205),
                         Color.fromARGB(250, 86, 94, 205),

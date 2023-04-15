@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +63,9 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
             children: [
               Column(
                 children: <Widget>[
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.10)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.10)),
                   Text(
                     "Регистрация",
                     style: TextStyle(
@@ -74,7 +73,9 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                         fontFamily: "OpenSans-SemiBold",
                         fontSize: 32),
                   ),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.03)),
                   isError
                       ? Container(
                           width: 300,
@@ -92,7 +93,9 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                           ),
                         )
                       : Container(),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.02)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.02)),
                   Container(
                     child: SizedBox(
                       width: 246,
@@ -129,7 +132,10 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03,)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.03,
+                  )),
                   Container(
                     child: SizedBox(
                       width: 246,
@@ -166,7 +172,10 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03,)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * 0.03,
+                  )),
                   Container(
                     child: SizedBox(
                       width: 246,
@@ -203,7 +212,9 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.03)),
                   Container(
                     child: SizedBox(
                       width: 246,
@@ -240,7 +251,9 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.03)),
                   Container(
                     child: SizedBox(
                       width: 246,
@@ -277,19 +290,22 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1)),
+                  Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.1)),
                   Container(
                     child: ElevatedButton(
                       onPressed: () async {
                         List<UserM> newUsers = [];
                         QuerySnapshot querySnapshot = await users.get();
-                        final allData =
-                            querySnapshot.docs.map((doc) => doc.data()).toList();
+                        final allData = querySnapshot.docs
+                            .map((doc) => doc.data())
+                            .toList();
                         for (int i = 0; i < allData.length; i++) {
                           newUsers.add(new UserM(
                               Login: querySnapshot.docs[i].get('Login'),
                               Phone: querySnapshot.docs[i].get('Phone'),
-                              id:  querySnapshot.docs[i].get('id')));
+                              id: querySnapshot.docs[i].get('id')));
                         }
                         if (Password.text != "" &&
                             RepeatPassword.text != "" &&
@@ -300,22 +316,20 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                             if (Password.text.length >= 6) {
                               if (isValidEmail(Email.text)) {
                                 if (isValidPhoneNumber(Phone.text)) {
-                                  int index = 0;
-        
                                   UserModel? user = await dbConnection.signIn(
                                       Email.text, Password.text);
-        
+
                                   if (newUsers
-                                          .where(
-                                              (element) => element.Login == Login)
+                                          .where((element) =>
+                                              element.Login == Login)
                                           .length ==
                                       0) {
                                     if (user == null) {
                                       user = await dbConnection.signUp(
                                           Email.text, Password.text);
                                       dbCon.uid = user?.id;
-                                      dbCon.updateUserData(
-                                          Login.text, Phone.text, dbCon.uid.toString());
+                                      dbCon.updateUserData(Login.text,
+                                          Phone.text, dbCon.uid.toString());
                                       Navigator.pushNamed(context, '/');
                                     } else {
                                       setState(() {
@@ -345,7 +359,8 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                               }
                             } else {
                               setState(() {
-                                ErrorMes = "Пароль должен быть больше 5 символов";
+                                ErrorMes =
+                                    "Пароль должен быть больше 5 символов";
                                 isError = true;
                               });
                             }
@@ -411,7 +426,6 @@ class UserM {
     Login = data['Login'];
     Phone = data['Phone'];
     id = data['id'];
-
   }
 
   static fromMap(value) {}

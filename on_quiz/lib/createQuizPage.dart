@@ -1,13 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:on_quiz/authPage.dart';
 import 'package:on_quiz/quizClass.dart';
-import 'package:on_quiz/registrationPage.dart';
-import 'package:on_quiz/services/model.dart';
-import 'package:on_quiz/services/services.dart';
 
 import 'createQuestion.dart';
 
@@ -48,7 +43,9 @@ class _MyWidgetState extends State<CreateQuizPage> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.001)),
+          Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.001)),
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -101,7 +98,10 @@ class _MyWidgetState extends State<CreateQuizPage> {
                           )),
                     ))),
           ),
-          Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03,)),
+          Padding(
+              padding: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * 0.03,
+          )),
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -157,15 +157,18 @@ class _MyWidgetState extends State<CreateQuizPage> {
                           )),
                     ))),
           ),
-          Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03,)),
+          Padding(
+              padding: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * 0.03,
+          )),
           Container(
             child: SizedBox(
               width: 300,
               height: MediaQuery.of(context).size.height * 0.07,
               child: TextFormField(
                 inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp('[a-zA-Zа-яА-Я ]')),
-              ],
+                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Zа-яА-Я ]')),
+                ],
                 controller: nameController,
                 style: TextStyle(
                     color: Color.fromARGB(250, 250, 250, 250),
@@ -195,18 +198,20 @@ class _MyWidgetState extends State<CreateQuizPage> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.03)),
+          Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.03)),
           Container(
             child: SizedBox(
               width: 300,
               height: MediaQuery.of(context).size.height * 0.07,
               child: TextFormField(
                 inputFormatters: <TextInputFormatter>[
-   // for below version 2 use this
- FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  // for below version 2 use this
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
 // for version 2 and greater youcan also use this
- FilteringTextInputFormatter.digitsOnly
-  ],
+                  FilteringTextInputFormatter.digitsOnly
+                ],
                 keyboardType: TextInputType.number,
                 controller: quesCountController,
                 style: TextStyle(
@@ -237,9 +242,11 @@ class _MyWidgetState extends State<CreateQuizPage> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.07,)),
+          Padding(
+              padding: EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * 0.07,
+          )),
           Container(
-            
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 border: Border.all(
@@ -254,7 +261,7 @@ class _MyWidgetState extends State<CreateQuizPage> {
                 color: Color.fromARGB(250, 132, 199, 110),
                 onPressed: () async {
                   String? Login = userLogin;
-                  
+
                   if (categoryValue != null &&
                       complexity != null &&
                       nameController.text != "") {
@@ -264,30 +271,42 @@ class _MyWidgetState extends State<CreateQuizPage> {
                         Category: categoryValue,
                         Name: nameController.text,
                         Difficult: complexity);
-                        activeQuiz.questions.add(new Question(discription: "", answerFour: "", answerOne: "", answerThree: "", answerTwo: "", correctanswer: ""));
+                    activeQuiz.questions.add(new Question(
+                        discription: "",
+                        answerFour: "",
+                        answerOne: "",
+                        answerThree: "",
+                        answerTwo: "",
+                        correctanswer: ""));
                     quesIndex = 0;
                     discriptionController.text =
-        activeQuiz.questions[quesIndex].discription.toString();
-    FirstAnswerController.text =
-        activeQuiz.questions[quesIndex].answerOne.toString();
-    SecondAnswerController.text =
-        activeQuiz.questions[quesIndex].answerTwo.toString();
-    ThreeAnswerController.text =
-        activeQuiz.questions[quesIndex].answerThree.toString();
-    FourAnswerController.text =
-        activeQuiz.questions[quesIndex].answerFour.toString();
-    CorrectAnswerController =
-        (activeQuiz.questions[quesIndex].correctanswer.toString() ==
-                activeQuiz.questions[quesIndex].answerOne.toString()
-            ? answersList[0]
-            : activeQuiz.questions[quesIndex].correctanswer.toString() ==
-                    activeQuiz.questions[quesIndex].answerTwo.toString()
-                ? answersList[1]
-                : activeQuiz.questions[quesIndex].correctanswer.toString() ==
-                        activeQuiz.questions[quesIndex].answerThree.toString()
-                    ? answersList[2]
-                    : answersList[3]);
-                    Navigator.pushNamed(context, "/createQuestion").then((value) =>                             FirebaseFirestore.instance
+                        activeQuiz.questions[quesIndex].discription.toString();
+                    FirstAnswerController.text =
+                        activeQuiz.questions[quesIndex].answerOne.toString();
+                    SecondAnswerController.text =
+                        activeQuiz.questions[quesIndex].answerTwo.toString();
+                    ThreeAnswerController.text =
+                        activeQuiz.questions[quesIndex].answerThree.toString();
+                    FourAnswerController.text =
+                        activeQuiz.questions[quesIndex].answerFour.toString();
+                    CorrectAnswerController = (activeQuiz
+                                .questions[quesIndex].correctanswer
+                                .toString() ==
+                            activeQuiz.questions[quesIndex].answerOne.toString()
+                        ? answersList[0]
+                        : activeQuiz.questions[quesIndex].correctanswer
+                                    .toString() ==
+                                activeQuiz.questions[quesIndex].answerTwo
+                                    .toString()
+                            ? answersList[1]
+                            : activeQuiz.questions[quesIndex].correctanswer
+                                        .toString() ==
+                                    activeQuiz.questions[quesIndex].answerThree
+                                        .toString()
+                                ? answersList[2]
+                                : answersList[3]);
+                    Navigator.pushNamed(context, "/createQuestion").then(
+                        (value) => FirebaseFirestore.instance
                                 .collection('quizs')
                                 .doc()
                                 .set({
@@ -310,6 +329,7 @@ class _MyWidgetState extends State<CreateQuizPage> {
     );
   }
 }
+
 int quesIndex = 0;
 int? questionsCount;
 Quiz activeQuiz =

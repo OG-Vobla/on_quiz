@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:on_quiz/QuizGame.dart';
-import 'package:on_quiz/quizsPage.dart';
 import 'package:on_quiz/services/services.dart';
+import 'package:on_quiz/startGame.dart';
 import 'package:provider/provider.dart';
 import 'authPage.dart';
 import 'registrationPage.dart';
@@ -35,7 +34,8 @@ class MyThemeApp extends StatelessWidget {
             '/mainPage': (context) => const MainPage(),
             '/myquiz': (context) => const MyQuizPage(),
             '/createQuestion': (context) => const CreateQuestion(),
-            '/quizgame':(context) => const GamePage(),
+            '/quizgame': (context) => const GamePage(),
+            '/startgame': (context) => const StartGame()
           },
         ));
   }
