@@ -329,7 +329,7 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                                           Email.text, Password.text);
                                       dbCon.uid = user?.id;
                                       dbCon.updateUserData(Login.text,
-                                          Phone.text, dbCon.uid.toString());
+                                          Phone.text, dbCon.uid.toString(), 0);
                                       Navigator.pushNamed(context, '/');
                                     } else {
                                       setState(() {

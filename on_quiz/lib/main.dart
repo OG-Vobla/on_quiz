@@ -6,6 +6,7 @@ import 'package:on_quiz/services/services.dart';
 import 'package:on_quiz/startGame.dart';
 import 'package:provider/provider.dart';
 import 'authPage.dart';
+import 'multiplayerPage.dart';
 import 'registrationPage.dart';
 import 'mainPage.dart';
 import 'myquiz.dart';
@@ -37,7 +38,8 @@ class MyThemeApp extends StatelessWidget {
             '/createQuestion': (context) => const CreateQuestion(),
             '/quizgame': (context) => const GamePage(),
             '/startgame': (context) => const StartGame(),
-            '/editQuizName': (context) => const EditQuizName()
+            '/editQuizName': (context) => const EditQuizName(),
+            '/multiplayerPage' :(context) => const MultiplayerPage()
           },
         ));
   }

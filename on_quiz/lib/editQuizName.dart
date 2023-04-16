@@ -153,7 +153,7 @@ class _EditQuizNameState extends State<EditQuizName> {
                           onChanged: (String? value) {
                             // This is called when the user selects an item.
                             setState(() {
-                              categoryValue = value!;
+                              editCategoryValue = value!;
                             });
                           },
                           hint: Container(
@@ -230,12 +230,60 @@ class _EditQuizNameState extends State<EditQuizName> {
                           iconSize: MediaQuery.of(context).size.height * 0.1,
                           color: Color.fromARGB(211, 234, 40, 40),
                           onPressed: () {
-                            FirebaseFirestore.instance
+                            showDialog(barrierDismissible: false,
+context: context, builder: (_) => AlertDialog(
+                              
+                            backgroundColor: Color.fromARGB(250, 86, 94, 205),
+                              title: Text(
+                                "Осторожно!",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: "OpenSans-SemiBold",
+                                  fontSize: 22,
+                                ),
+                              ),
+                              content: Text(
+                                "Вы уверены что хотите удалить викторину?",
+                                style: TextStyle(
+                                  color: Color.fromARGB(211, 255, 255, 255),
+                                  fontFamily: "OpenSans-SemiBold",
+                                  fontSize: 19,
+                                ),
+                              ),
+                              actions: [
+                                CupertinoDialogAction(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "Нет",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(211, 234, 40, 40),
+                                      fontFamily: "OpenSans-SemiBold",
+                                      fontSize: 19,
+                                    ),
+                                  ),
+                                  
+                                ),CupertinoDialogAction(
+                                                                    onPressed: () {
+                                    FirebaseFirestore.instance
                                 .collection('quizs')
                                 .doc(activeQuizId)
                                 .delete();
                             isDelete = true;
                             Navigator.popAndPushNamed(context, '/mainPage');
+                                  },
+                                  child: Text(
+                                    "Да",
+                                    style: TextStyle(
+                                      color: Color.fromARGB(210, 66, 234, 40),
+                                      fontFamily: "OpenSans-SemiBold",
+                                      fontSize: 19,
+                                    ),
+                                  ),
+                                  
+                                )
+                              ],
+                            ));
+                            
                           }),
                     ),
                     SizedBox(
@@ -260,11 +308,16 @@ class _EditQuizNameState extends State<EditQuizName> {
                                   newQues.add(activeQuiz.questions[i]);
                                 }
                                 activeQuiz.questions = newQues;
-                              }
-                              else{
-                                while(activeQuiz.questions.length != int.parse(countQuestions!))
-                                {
-                                  activeQuiz.questions.add(new Question(discription: "", answerFour: "", answerOne: "", answerThree: "", answerTwo: "", correctanswer: ""));
+                              } else {
+                                while (activeQuiz.questions.length !=
+                                    int.parse(countQuestions!)) {
+                                  activeQuiz.questions.add(new Question(
+                                      discription: "",
+                                      answerFour: "",
+                                      answerOne: "",
+                                      answerThree: "",
+                                      answerTwo: "",
+                                      correctanswer: ""));
                                 }
                               }
                               Navigator.popAndPushNamed(

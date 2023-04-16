@@ -1,10 +1,11 @@
 class Quiz {
   String? Name;
   String? UserLogin;
+  String? UserId;
   String? Category;
   String? Difficult;
   List<Question> questions = [];
-  Quiz({this.Name, this.UserLogin, this.Category, this.Difficult});
+  Quiz({this.Name, this.UserLogin, this.Category, this.Difficult, this.UserId});
 }
 
 class Question {

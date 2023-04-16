@@ -270,7 +270,7 @@ class _MyWidgetState extends State<CreateQuizPage> {
                         UserLogin: Login,
                         Category: categoryValue,
                         Name: nameController.text,
-                        Difficult: complexity);
+                        Difficult: complexity, UserId: curUser?.id);
                     activeQuiz.questions.add(new Question(
                         discription: "",
                         answerFour: "",
@@ -322,4 +322,4 @@ bool isEdit  = false;
 int quesIndex = 0;
 int? questionsCount;
 Quiz activeQuiz =
-    new Quiz(UserLogin: "", Category: "", Name: "", Difficult: "");
+    new Quiz(UserLogin: "", Category: "", Name: "", Difficult: "", UserId: curUser?.id);

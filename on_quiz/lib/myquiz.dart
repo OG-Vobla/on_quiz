@@ -41,7 +41,7 @@ class MyQuizPage extends StatelessWidget {
                       Category: snapshot.data?.docs[index].get('category'),
                       Difficult: snapshot.data?.docs[index].get('difficult'),
                       Name: snapshot.data?.docs[index].get('name'),
-                      UserLogin: snapshot.data?.docs[index].get('userLogin'));
+                      UserLogin: snapshot.data?.docs[index].get('userLogin'), UserId: curUser?.id);
                   List<Question> quess = [];
                   List<dynamic> sdf =
                       snapshot.data?.docs[index].get('questions');
@@ -174,9 +174,9 @@ class MyQuizPage extends StatelessWidget {
                   ),
                 ),
               );
-              String newStr = snapshot.data?.docs[index].get('userLogin');
+              String newStr = snapshot.data?.docs[index].get('userId');
 
-              if (newStr.contains(userLogin)) {
+              if (newStr.contains(curUser!.id.toString())) {
                 return card;
               }
 

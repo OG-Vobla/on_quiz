@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:on_quiz/authPage.dart';
 import 'package:on_quiz/myquiz.dart';
 import 'package:on_quiz/quizClass.dart';
 import 'QuizGame.dart';
@@ -34,12 +36,6 @@ class StateMainPage extends State<MainPage> {
     setState(
       () {
         searchText = value;
-
-        // return newDealList
-        //     .where(
-        //       (element) => element.title!.contains(value),
-        //     )
-        //     .toList();
       },
     );
   }
@@ -75,13 +71,13 @@ class StateMainPage extends State<MainPage> {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data?.docs.length == 0 || !snapshot.hasData) {
             return Text(
-            "Нет записей",
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: "OpenSans-SemiBold",
-              fontSize: 22,
-            ),
-          );
+              "Нет записей",
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: "OpenSans-SemiBold",
+                fontSize: 22,
+              ),
+            );
           } else {
             return ListView.builder(
               itemCount: snapshot.data?.docs.length,
@@ -93,7 +89,7 @@ class StateMainPage extends State<MainPage> {
                         Category: snapshot.data?.docs[index].get('category'),
                         Difficult: snapshot.data?.docs[index].get('difficult'),
                         Name: snapshot.data?.docs[index].get('name'),
-                        UserLogin: snapshot.data?.docs[index].get('userLogin'));
+                        UserLogin: snapshot.data?.docs[index].get('userLogin'), UserId: curUser?.id);
                     List<Question> quess = [];
                     List<dynamic> sdf =
                         snapshot.data?.docs[index].get('questions');
@@ -296,6 +292,17 @@ class StateMainPage extends State<MainPage> {
             fontSize: 22),
       ),
       centerTitle: true,
+      actions: [
+        selectedIndex == 2 ?  IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/multiplayerPage');
+            },
+            icon: const Icon(
+              Icons.cloud_circle_outlined ,
+              size: 30,
+            ))
+            : const Icon(null)
+      ],
     );
     return Scaffold(
 
@@ -307,45 +314,48 @@ class StateMainPage extends State<MainPage> {
         body: Center(
           child: list.elementAt(selectedIndex),
         ),
-        bottomNavigationBar: ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
-              child: BottomNavigationBar(
-                onTap: onItemTap,
-                backgroundColor: (Color.fromARGB(255, 58, 40, 167)),
-                unselectedItemColor: Color.fromARGB(255, 145, 135, 206),
-                selectedItemColor: Color.fromARGB(255, 207, 217, 255),
-                selectedLabelStyle: TextStyle(
-                    color: Color.fromARGB(255, 207, 217, 255),
-                    fontFamily: "OpenSans-SemiBold",
-                    fontSize: MediaQuery.of(context).size.height * 0.014),
-                unselectedLabelStyle: TextStyle(
-                    color: Color.fromARGB(255, 207, 217, 255),
-                    fontFamily: "OpenSans-SemiBold",
-                    fontSize: MediaQuery.of(context).size.height * 0.011),
-                showUnselectedLabels: true,
-                currentIndex: selectedIndex,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.people_outline_outlined,
-                        size: MediaQuery.of(context).size.height * 0.045),
-                    label: 'Онлайн викторины',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.add,
-                      size: (MediaQuery.of(context).size.height * 0.045),
-                    ),
-                    label: 'Создать викторину',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.person_outline_outlined,
-                        size: MediaQuery.of(context).size.height * 0.045),
-                    label: 'Мои викторины',
-                  ),
-                ],
+        bottomNavigationBar: GNav(
+            backgroundColor: (Color.fromARGB(255, 58, 40, 167)),
+            duration:
+                Duration(milliseconds: 900), // tab animation duration
+            gap: 4, // the tab button gap between icon and text
+            iconSize: MediaQuery.of(context).size.height *
+                0.045, // tab button icon size
+            color: Color.fromARGB(255, 145, 135, 206),
+            activeColor: Color.fromARGB(255, 207, 217, 255),
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.015,
+                bottom: MediaQuery.of(context).size.height * 0.015,
+                left: MediaQuery.of(context).size.width * 0.075,
+                right: MediaQuery.of(context).size.width * 0.075),
+            tabs: [
+              GButton(
+        onPressed: () {
+          setState(() {
+            selectedIndex = 0;
+          });
+        },
+        icon: Icons.auto_awesome_motion_outlined ,
+        text: 'Онлайн',
               ),
-            )));
+              GButton(
+        onPressed: () {
+          setState(() {
+            selectedIndex = 1;
+          });
+        },
+        icon: Icons.add,
+        text: 'Создание',
+              ),
+              GButton(
+        onPressed: () {
+          setState(() {
+            selectedIndex = 2;
+          });
+        },
+        icon: Icons.person_outline_outlined,
+        text: 'Свои',
+              ),
+            ]));
   }
 }

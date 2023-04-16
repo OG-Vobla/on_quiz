@@ -316,6 +316,7 @@ class _CreateQuestionState extends State<CreateQuestion> {
                         color: Color.fromARGB(250, 132, 199, 110),
                         onPressed: () {
                           if (quesIndex == 0) {
+                            Navigator.popAndPushNamed(context, '/mainPage');
                           } else {
                             setState(() {
                               quesIndex = quesIndex - 1;
@@ -390,37 +391,38 @@ class _CreateQuestionState extends State<CreateQuestion> {
                           }
 
                           if (quesIndex + 1 == questionsCount) {
-                            if(isEdit){
-FirebaseFirestore.instance
-                              .collection('quizs')
-                              .doc(activeQuizId)
-                              .set({
-                            'name': activeQuiz.Name,
-                            'userLogin': activeQuiz.UserLogin,
-                            "category": activeQuiz.Category,
-                            "difficult": activeQuiz.Difficult,
-                            "questions": FieldValue.arrayUnion(activeQuiz
-                                .questions
-                                .map<Map>((e) => e.toMap())
-                                .toList()),
-                          });
+                            if (isEdit) {
+                              FirebaseFirestore.instance
+                                  .collection('quizs')
+                                  .doc(activeQuizId)
+                                  .set({
+                                'name': activeQuiz.Name,
+                                'userLogin': activeQuiz.UserLogin,
+                                "category": activeQuiz.Category,
+                                "difficult": activeQuiz.Difficult,
+                                "userId": activeQuiz.UserId,
+                                "questions": FieldValue.arrayUnion(activeQuiz
+                                    .questions
+                                    .map<Map>((e) => e.toMap())
+                                    .toList()),
+                              });
+                            } else {
+                              FirebaseFirestore.instance
+                                  .collection('quizs')
+                                  .doc()
+                                  .set({
+                                'name': activeQuiz.Name,
+                                'userLogin': activeQuiz.UserLogin,
+                                "category": activeQuiz.Category,
+                                "difficult": activeQuiz.Difficult,
+                                "userId": activeQuiz.UserId,
+                                "questions": FieldValue.arrayUnion(activeQuiz
+                                    .questions
+                                    .map<Map>((e) => e.toMap())
+                                    .toList()),
+                              });
                             }
-                            else{
-                               FirebaseFirestore.instance
-                                .collection('quizs')
-                                .doc()
-                                .set({
-                              'name': activeQuiz.Name,
-                              'userLogin': activeQuiz.UserLogin,
-                              "category": activeQuiz.Category,
-                              "difficult": activeQuiz.Difficult,
-                              "questions": FieldValue.arrayUnion(activeQuiz
-                                  .questions
-                                  .map<Map>((e) => e.toMap())
-                                  .toList()),
-                            });
-                            }
-                             
+
                             Navigator.popAndPushNamed(context, '/mainPage');
                           } else {
                             setState(() {
