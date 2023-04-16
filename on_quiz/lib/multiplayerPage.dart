@@ -60,7 +60,10 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
     );
     Widget listSearchWidget(BuildContext context) {
       return StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('users').orderBy('starsCount', descending: true).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .orderBy('starsCount', descending: true)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data?.docs.length == 0 || !snapshot.hasData) {
             return Text(
@@ -142,10 +145,7 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
       );
     }
 
-    final list = [
-      listSearchWidget(context),
-      const ProfileEditPage()
-    ];
+    final list = [listSearchWidget(context), const ProfileEditPage()];
     AppBar deffaultAppBar = AppBar(
       automaticallyImplyLeading: false,
       iconTheme: IconThemeData(
@@ -222,7 +222,7 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
             ))
       ],
     );
-        final DocumentReference<Map<String, dynamic>> docRef =
+    final DocumentReference<Map<String, dynamic>> docRef =
         FirebaseFirestore.instance.collection("users").doc(curUser?.id);
     docRef.get().then((doc) {
       stars = doc.data()!["starsCount"];
@@ -242,7 +242,7 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
             iconSize: MediaQuery.of(context).size.height *
                 0.045, // tab button icon size
             color: Color.fromARGB(255, 145, 135, 206),
-            activeColor: Color.fromARGB(255, 5, 5, 8),
+            activeColor: Color.fromARGB(255, 207, 217, 255),
             padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.height * 0.015,
                 bottom: MediaQuery.of(context).size.height * 0.015,

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:on_quiz/QuizGame.dart';
 import 'package:on_quiz/editQuizName.dart';
+import 'package:on_quiz/resultPage.dart';
 import 'package:on_quiz/services/services.dart';
 import 'package:on_quiz/startGame.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,8 @@ class MyThemeApp extends StatelessWidget {
             '/quizgame': (context) => const GamePage(),
             '/startgame': (context) => const StartGame(),
             '/editQuizName': (context) => const EditQuizName(),
-            '/multiplayerPage' :(context) => const MultiplayerPage()
+            '/multiplayerPage': (context) => const MultiplayerPage(),
+            '/resultpage': (context) => const ResultPage()
           },
         ));
   }

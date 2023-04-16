@@ -9,6 +9,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:on_quiz/authPage.dart';
 import 'package:on_quiz/myquiz.dart';
 import 'package:on_quiz/quizClass.dart';
+import 'package:on_quiz/resultPage.dart';
 import 'QuizGame.dart';
 import 'quizsPage.dart';
 import 'createQuizPage.dart';
@@ -89,7 +90,8 @@ class StateMainPage extends State<MainPage> {
                         Category: snapshot.data?.docs[index].get('category'),
                         Difficult: snapshot.data?.docs[index].get('difficult'),
                         Name: snapshot.data?.docs[index].get('name'),
-                        UserLogin: snapshot.data?.docs[index].get('userLogin'), UserId: curUser?.id);
+                        UserLogin: snapshot.data?.docs[index].get('userLogin'),
+                        UserId: curUser?.id);
                     List<Question> quess = [];
                     List<dynamic> sdf =
                         snapshot.data?.docs[index].get('questions');
@@ -215,7 +217,8 @@ class StateMainPage extends State<MainPage> {
     final list = [
       listSearchWidget(context),
       const CreateQuizPage(),
-      const MyQuizPage(),
+      // const MyQuizPage(),
+      const ResultPage()
     ];
     AppBar appBarSearch = AppBar(
       automaticallyImplyLeading: false,
@@ -293,14 +296,15 @@ class StateMainPage extends State<MainPage> {
       ),
       centerTitle: true,
       actions: [
-        selectedIndex == 2 ?  IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/multiplayerPage');
-            },
-            icon: const Icon(
-              Icons.cloud_circle_outlined ,
-              size: 30,
-            ))
+        selectedIndex == 2
+            ? IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/multiplayerPage');
+                },
+                icon: const Icon(
+                  Icons.cloud_circle_outlined,
+                  size: 30,
+                ))
             : const Icon(null)
       ],
     );
@@ -316,8 +320,7 @@ class StateMainPage extends State<MainPage> {
         ),
         bottomNavigationBar: GNav(
             backgroundColor: (Color.fromARGB(255, 58, 40, 167)),
-            duration:
-                Duration(milliseconds: 900), // tab animation duration
+            duration: Duration(milliseconds: 900), // tab animation duration
             gap: 4, // the tab button gap between icon and text
             iconSize: MediaQuery.of(context).size.height *
                 0.045, // tab button icon size
@@ -330,31 +333,31 @@ class StateMainPage extends State<MainPage> {
                 right: MediaQuery.of(context).size.width * 0.075),
             tabs: [
               GButton(
-        onPressed: () {
-          setState(() {
-            selectedIndex = 0;
-          });
-        },
-        icon: Icons.auto_awesome_motion_outlined ,
-        text: 'Онлайн',
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = 0;
+                  });
+                },
+                icon: Icons.auto_awesome_motion_outlined,
+                text: 'Онлайн',
               ),
               GButton(
-        onPressed: () {
-          setState(() {
-            selectedIndex = 1;
-          });
-        },
-        icon: Icons.add,
-        text: 'Создание',
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = 1;
+                  });
+                },
+                icon: Icons.add,
+                text: 'Создание',
               ),
               GButton(
-        onPressed: () {
-          setState(() {
-            selectedIndex = 2;
-          });
-        },
-        icon: Icons.person_outline_outlined,
-        text: 'Свои',
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = 2;
+                  });
+                },
+                icon: Icons.person_outline_outlined,
+                text: 'Свои',
               ),
             ]));
   }
