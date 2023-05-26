@@ -7,9 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:on_quiz/authPage.dart';
+import 'package:on_quiz/multiplayerPage.dart';
 import 'package:on_quiz/myquiz.dart';
 import 'package:on_quiz/quizClass.dart';
 import 'package:on_quiz/resultPage.dart';
+import 'package:on_quiz/services/services.dart';
 import 'QuizGame.dart';
 import 'quizsPage.dart';
 import 'createQuizPage.dart';
@@ -24,8 +26,11 @@ class MainPage extends StatefulWidget {
 }
 
 class StateMainPage extends State<MainPage> {
-  int selectedIndex = 0;
+  int selectedIndex = 1;
   String searchText = "";
+List<String> newCompleteQuizs = [];
+          final DocumentReference<Map<String, dynamic>> docRef =
+              FirebaseFirestore.instance.collection("users").doc(curUser?.id);
 
   void onItemTap(int index) {
     setState(() {
@@ -61,15 +66,21 @@ class StateMainPage extends State<MainPage> {
   bool tittleAppBar = false;
   @override
   Widget build(BuildContext context) {
+
+    DbConnection as = DbConnection();
     Icon icon = new Icon(
       Icons.star,
       color: Color.fromARGB(255, 249, 225, 159),
       size: 35,
     );
     Widget listSearchWidget(BuildContext context) {
+                             docRef.get().then((doc) {
+            newCompleteQuizs = List.from(doc.data()!["completeQuizs"]);
+          });
       return StreamBuilder(
         stream: FirebaseFirestore.instance.collection('quizs').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
           if (snapshot.data?.docs.length == 0 || !snapshot.hasData) {
             return Text(
               "Нет записей",
@@ -84,38 +95,49 @@ class StateMainPage extends State<MainPage> {
               itemCount: snapshot.data?.docs.length,
               itemBuilder: (BuildContext context, int index) {
                 GestureDetector card = GestureDetector(
+                  
                   onTap: () async {
-                    quesIndex = 0;
                     activeQuiz = new Quiz(
-                        Category: snapshot.data?.docs[index].get('category'),
-                        Difficult: snapshot.data?.docs[index].get('difficult'),
-                        Name: snapshot.data?.docs[index].get('name'),
-                        UserLogin: snapshot.data?.docs[index].get('userLogin'),
-                        UserId: curUser?.id);
-                    List<Question> quess = [];
-                    List<dynamic> sdf =
-                        snapshot.data?.docs[index].get('questions');
-                    final List<Map<String, dynamic>> fooData =
-                        List.from(sdf.where((x) => x is Map));
-                    for (var element in fooData) {
-                      quess.add(Question(
-                          discription: element['discription'],
-                          answerFour: element['answerFour'],
-                          answerOne: element['answerOne'],
-                          answerThree: element['answerThree'],
-                          answerTwo: element['answerTwo'],
-                          correctanswer: element['correctanswer']));
+                          Category: snapshot.data?.docs[index].get('category'),
+                          Difficult:
+                              snapshot.data?.docs[index].get('difficult'),
+                          Name: snapshot.data?.docs[index].get('name'),
+                          UserLogin:
+                              snapshot.data?.docs[index].get('userLogin'),
+                          UserId: curUser?.id);
+                      List<Question> quess = [];
+                      List<dynamic> sdf =
+                          snapshot.data?.docs[index].get('questions');
+                      final List<Map<String, dynamic>> fooData =
+                          List.from(sdf.where((x) => x is Map));
+                      for (var element in fooData) {
+                        quess.add(Question(
+                            discription: element['discription'],
+                            answerFour: element['answerFour'],
+                            answerOne: element['answerOne'],
+                            answerThree: element['answerThree'],
+                            answerTwo: element['answerTwo'],
+                            correctanswer: element['correctanswer']));
+                      }
+                      activeQuizId = snapshot.data?.docs[index].id;
+                      activeQuiz.questions = quess;
+                    if (newCompleteQuizs.contains(
+                        activeQuizId = snapshot.data?.docs[index].id) ||snapshot.data?.docs[index].get('userId') ==
+                        curUser!.id ) {
+                          Navigator.popAndPushNamed(context, '/reviewPage');
+                    } else {
+                      quesIndex = 0;
+                      
+                      Navigator.popAndPushNamed(context, '/startgame').then((value) {
+                        btnColors = [
+                          Color.fromARGB(250, 86, 94, 205),
+                          Color.fromARGB(250, 86, 94, 205),
+                          Color.fromARGB(250, 86, 94, 205),
+                          Color.fromARGB(250, 86, 94, 205)
+                        ];
+                        indexColor = 0;
+                      });
                     }
-                    activeQuiz.questions = quess;
-                    Navigator.pushNamed(context, '/startgame').then((value) {
-                      btnColors = [
-                        Color.fromARGB(250, 86, 94, 205),
-                        Color.fromARGB(250, 86, 94, 205),
-                        Color.fromARGB(250, 86, 94, 205),
-                        Color.fromARGB(250, 86, 94, 205)
-                      ];
-                      indexColor = 0;
-                    });
                   },
                   child: new Card(
                     shape: RoundedRectangleBorder(
@@ -123,7 +145,9 @@ class StateMainPage extends State<MainPage> {
                         side: const BorderSide(
                           color: Color.fromARGB(255, 86, 94, 205),
                         )),
-                    color: Color.fromARGB(255, 86, 94, 205),
+                    color: newCompleteQuizs.contains(
+                        activeQuizId = snapshot.data?.docs[index].id )  || snapshot.data?.docs[index].get('userId') ==
+                        curUser!.id ?Color.fromARGB(255, 103, 165, 87) :  Color.fromARGB(255, 86, 94, 205),
                     child: Column(
                       children: [
                         Row(
@@ -217,8 +241,7 @@ class StateMainPage extends State<MainPage> {
     final list = [
       listSearchWidget(context),
       const CreateQuizPage(),
-      // const MyQuizPage(),
-      const ResultPage()
+      const MyQuizPage(),
     ];
     AppBar appBarSearch = AppBar(
       automaticallyImplyLeading: false,
@@ -282,7 +305,15 @@ class StateMainPage extends State<MainPage> {
       ],
     );
     AppBar deffaultAppBar = AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: selectedIndex == 2,
+      leading: IconButton(
+        icon: Icon(Icons.logout),
+        onPressed: () {
+          as.logOut();
+
+          Navigator.popAndPushNamed(context, '/');
+        },
+      ),
       iconTheme: IconThemeData(
         color: Color.fromARGB(250, 153, 144, 210), //change your color here
       ),
@@ -309,8 +340,6 @@ class StateMainPage extends State<MainPage> {
       ],
     );
     return Scaffold(
-
-        //drawer:const MenuDrawer(),
         backgroundColor: Color.fromARGB(250, 93, 108, 215),
         appBar: selectedIndex == 0
             ? (tittleAppBar ? appBarSearch : appBar)
@@ -335,20 +364,20 @@ class StateMainPage extends State<MainPage> {
               GButton(
                 onPressed: () {
                   setState(() {
-                    selectedIndex = 0;
-                  });
-                },
-                icon: Icons.auto_awesome_motion_outlined,
-                text: 'Онлайн',
-              ),
-              GButton(
-                onPressed: () {
-                  setState(() {
                     selectedIndex = 1;
                   });
                 },
                 icon: Icons.add,
                 text: 'Создание',
+              ),
+              GButton(
+                onPressed: () {
+                  setState(() {
+                    selectedIndex = 0;
+                  });
+                },                icon: Icons.quiz_outlined,
+                text: 'Онлайн',
+
               ),
               GButton(
                 onPressed: () {

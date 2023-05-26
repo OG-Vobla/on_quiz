@@ -46,7 +46,7 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
 
   TextEditingController searchController = TextEditingController();
   final title = [
-    "Игроки",
+    "Рейтинг",
     "Профиль",
   ];
 
@@ -112,8 +112,8 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          snapshot.data?.docs[index]
-                                              .get('starsCount'),
+                                          (snapshot.data?.docs[index]
+                                              .get('starsCount')).toString(),
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontFamily: "OpenSans-SemiBold",
@@ -147,7 +147,7 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
 
     final list = [listSearchWidget(context), const ProfileEditPage()];
     AppBar deffaultAppBar = AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: true,
       iconTheme: IconThemeData(
         color: Color.fromARGB(250, 153, 144, 210), //change your color here
       ),
@@ -196,7 +196,7 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
       ],
     );
     AppBar appBar = AppBar(
-      automaticallyImplyLeading: false,
+      automaticallyImplyLeading: true,
       iconTheme: IconThemeData(
         color: Color.fromARGB(255, 145, 135, 206), //change your color here
       ),
@@ -225,7 +225,7 @@ class MmultiplayerPageState extends State<MultiplayerPage> {
     final DocumentReference<Map<String, dynamic>> docRef =
         FirebaseFirestore.instance.collection("users").doc(curUser?.id);
     docRef.get().then((doc) {
-      stars = doc.data()!["starsCount"];
+      stars = doc.data()!["starsCount"].toString();
     });
     return Scaffold(
         backgroundColor: Color.fromARGB(250, 93, 108, 215),

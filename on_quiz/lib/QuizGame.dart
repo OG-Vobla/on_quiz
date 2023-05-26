@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:on_quiz/createQuizPage.dart';
+import 'package:on_quiz/startGame.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -53,6 +54,10 @@ class _MyWidgetState extends State<GamePage> {
         checkColor(2);
         return true;
       } else {
+        quizStars = quizStars! - 1;
+        if (quizStars == 0) {
+          quizStars = 0;
+        }
         checkColor(1);
         return false;
       }
@@ -61,21 +66,27 @@ class _MyWidgetState extends State<GamePage> {
     void goNext() {
       canEdit = false;
       Timer(Duration(seconds: 2), () {
-        setState(() {
-          if (quesIndex == activeQuiz.questions.length - 1) {
-            Navigator.popAndPushNamed(context, '/mainPage');
+bool isEnd = false;
+                          if (quesIndex == activeQuiz.questions.length - 1) {
+isEnd = true;
           } else {
             quesIndex++;
           }
-           btnColors = [
-  Color.fromARGB(250, 86, 94, 205),
-  Color.fromARGB(250, 86, 94, 205),
-  Color.fromARGB(250, 86, 94, 205),
-  Color.fromARGB(250, 86, 94, 205)
-];
- indexColor = 0;
-      canEdit = true;
-        });
+         setState(() {
+          btnColors = [
+            Color.fromARGB(250, 86, 94, 205),
+            Color.fromARGB(250, 86, 94, 205),
+            Color.fromARGB(250, 86, 94, 205),
+            Color.fromARGB(250, 86, 94, 205)
+          ];
+          indexColor = 0;
+          canEdit = true;
+        });       
+                    if (isEnd  || quizStars == 0) {
+                      
+            Navigator.popAndPushNamed(context, '/resultpage');
+          }
+       
       });
     }
 
@@ -94,7 +105,7 @@ class _MyWidgetState extends State<GamePage> {
                   color: Colors.white,
                   fontFamily: "OpenSans-SemiBold",
                   fontSize: 22),
-            ),
+            ), 
             Padding(
                 padding: EdgeInsets.only(
               top: MediaQuery.of(context).size.height * 0.03,
@@ -129,18 +140,16 @@ class _MyWidgetState extends State<GamePage> {
                 children: [
                   Container(
                     child: ElevatedButton(
-                      onPressed: () async {
-                        if (canEdit) {
+                      onPressed: () {
                           if (isCorrrect(activeQuiz
                               .questions[quesIndex].answerOne
                               .toString())) {
-                            print('object');
                           }
                           setState(() {
                             btnColors[0] = colors[indexColor];
                           });
                           goNext();
-                        }
+                        
                       },
                       child: Text(
                         activeQuiz.questions[quesIndex].answerOne.toString(),
@@ -168,7 +177,6 @@ class _MyWidgetState extends State<GamePage> {
                   Container(
                     child: ElevatedButton(
                       onPressed: () {
-                        if (canEdit) {
                           if (isCorrrect(activeQuiz
                               .questions[quesIndex].answerTwo
                               .toString())) {}
@@ -176,7 +184,7 @@ class _MyWidgetState extends State<GamePage> {
                             btnColors[1] = colors[indexColor];
                           });
                           goNext();
-                        }
+                        
                       },
                       child: Text(
                         activeQuiz.questions[quesIndex].answerTwo.toString(),
@@ -203,8 +211,7 @@ class _MyWidgetState extends State<GamePage> {
                   )),
                   Container(
                     child: ElevatedButton(
-                      onPressed: () async {
-                        if (canEdit) {
+                      onPressed: () {
                           if (isCorrrect(activeQuiz
                               .questions[quesIndex].answerThree
                               .toString())) {}
@@ -212,7 +219,7 @@ class _MyWidgetState extends State<GamePage> {
                             btnColors[2] = colors[indexColor];
                           });
                           goNext();
-                        }
+                        
                       },
                       child: Text(
                         activeQuiz.questions[quesIndex].answerThree.toString(),
@@ -239,8 +246,7 @@ class _MyWidgetState extends State<GamePage> {
                   )),
                   Container(
                     child: ElevatedButton(
-                      onPressed: () async {
-                        if (canEdit) {
+                      onPressed: () {
                           if (isCorrrect(activeQuiz
                               .questions[quesIndex].answerFour
                               .toString())) {}
@@ -248,7 +254,7 @@ class _MyWidgetState extends State<GamePage> {
                             btnColors[3] = colors[indexColor];
                           });
                           goNext();
-                        }
+                        
                       },
                       child: Text(
                         activeQuiz.questions[quesIndex].answerFour.toString(),

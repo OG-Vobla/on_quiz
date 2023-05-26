@@ -41,7 +41,8 @@ class _EditQuizNameState extends State<EditQuizName> {
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
         floatingActionButton: IconButton(
-          onPressed: () => Navigator.popAndPushNamed(context, '/mainPage'),
+          onPressed: () => 
+                            Navigator.pop(context),
           icon: Icon(
             Icons.arrow_back,
             size: MediaQuery.of(context).size.height * 0.06,
@@ -269,7 +270,9 @@ context: context, builder: (_) => AlertDialog(
                                 .doc(activeQuizId)
                                 .delete();
                             isDelete = true;
-                            Navigator.popAndPushNamed(context, '/mainPage');
+                            
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                                   },
                                   child: Text(
                                     "Да",
@@ -296,7 +299,7 @@ context: context, builder: (_) => AlertDialog(
                             isEdit = true;
                             if (nameEditController.text != "" &&
                                 editCategoryValue != "" &&
-                                quesEditCountController.text != "") {
+                                quesEditCountController.text != "" && nameEditController.text.length < 15) {
                               activeQuiz.Name = nameEditController.text;
                               activeQuiz.Category = editCategoryValue;
                               questionsCount =

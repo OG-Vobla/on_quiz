@@ -329,7 +329,7 @@ class _MyRegistrationPageState extends State<RegistrationPage> {
                                           Email.text, Password.text);
                                       dbCon.uid = user?.id;
                                       dbCon.updateUserData(Login.text,
-                                          Phone.text, dbCon.uid.toString(), 0);
+                                          Phone.text, dbCon.uid.toString(), 0, []);
                                       Navigator.pushNamed(context, '/');
                                     } else {
                                       setState(() {
@@ -421,12 +421,5 @@ class UserM {
   String? Phone;
   String? id;
   UserM({this.Login, this.Phone, this.id});
-
-  UserM.romJson(Map data) {
-    Login = data['Login'];
-    Phone = data['Phone'];
-    id = data['id'];
-  }
-
-  static fromMap(value) {}
+  
 }

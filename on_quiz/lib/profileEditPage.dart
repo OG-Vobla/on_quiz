@@ -36,9 +36,11 @@ class PprofileEditPageState extends State<ProfileEditPage> {
   Widget build(BuildContext context) {
         final DocumentReference<Map<String, dynamic>> docRef =
         FirebaseFirestore.instance.collection("users").doc(curUser?.id);
+        List<String>? newCompleteQuizs;
     docRef.get().then((doc) {
       ProfileLoginController.text = doc.data()!["Login"];
       ProfilePhoneController.text = doc.data()!["Phone"];
+        newCompleteQuizs = List.from(doc.data()!["completeQuizs"]);
     });
     
     return SingleChildScrollView(
@@ -175,13 +177,13 @@ class PprofileEditPageState extends State<ProfileEditPage> {
                 }
                 if (ProfilePhoneController.text != "" && ProfileLoginController.text != "") {
                   if (newUsers
-                          .where((element) => element.Login == ProfileLoginController)
+                          .where((element) => element.Login == ProfileLoginController.text)
                           .length ==
                       0) {
                     userLogin = ProfileLoginController.text;
                     dbCon.uid = curUser?.id;
                     dbCon.updateUserData(ProfileLoginController.text, ProfilePhoneController.text,
-                        dbCon.uid.toString(), int.parse(stars!));
+                        dbCon.uid.toString(), int.parse(stars!), newCompleteQuizs!);
                   } else {
                     setState(() {
                       ErrorMes = "Пользователь с таким логином уже существует";

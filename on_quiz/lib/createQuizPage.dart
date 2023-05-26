@@ -264,7 +264,7 @@ class _MyWidgetState extends State<CreateQuizPage> {
 
                   if (categoryValue != null &&
                       complexity != null &&
-                      nameController.text != "") {
+                      nameController.text != "" && nameController.text.length < 15) {
                     questionsCount = int.parse(quesCountController.text);
                     activeQuiz = new Quiz(
                         UserLogin: Login,

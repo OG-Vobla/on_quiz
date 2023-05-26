@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:on_quiz/authPage.dart';
 import 'package:on_quiz/createQuizPage.dart';
 import 'package:on_quiz/myquiz.dart';
 
-class StartGame extends StatefulWidget {
-  const StartGame({super.key});
+class ReviewPage extends StatefulWidget {
+  const ReviewPage({super.key});
 
   @override
-  State<StartGame> createState() => _StartGameState();
+  State<ReviewPage> createState() => _ReviewPageState();
 }
 
 String? nameQuiz;
@@ -17,7 +18,9 @@ String? loginUser;
 
 String? countQuestions;
 
-class _StartGameState extends State<StartGame> {
+TextEditingController discriptionController = TextEditingController();
+
+class _ReviewPageState extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
     nameQuiz = activeQuiz.Name;
@@ -25,13 +28,6 @@ class _StartGameState extends State<StartGame> {
     loginUser = activeQuiz.UserLogin;
 
     countQuestions = activeQuiz.questions.length.toString();
-    if (activeQuiz.Difficult == "Сложная") {
-      quizStars = 3;
-    } else if (activeQuiz.Difficult == "Легкая") {
-      quizStars = 1;
-    } else {
-      quizStars = 2;
-    }
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
       floatingActionButton: IconButton(
@@ -149,19 +145,83 @@ class _StartGameState extends State<StartGame> {
             top: MediaQuery.of(context).size.height * 0.01,
           )),
           SizedBox(
-            child: IconButton(
-                icon: Icon(Icons.play_circle_outline),
-                iconSize: MediaQuery.of(context).size.height * 0.25,
-                color: Color.fromARGB(250, 132, 199, 110),
-                onPressed: () {
-                  Navigator.popAndPushNamed(context, '/quizgame');
-                }),
-          ),
-          SizedBox(
             child: Divider(
                 height: 4,
                 thickness: 4,
                 color: Color.fromARGB(207, 255, 255, 255)),
+          ),
+          Container(
+            width: (MediaQuery.of(context).size.width * 1),
+            height: MediaQuery.of(context).size.height * 0.24,
+            color: Color.fromARGB(250, 86, 94, 205),
+            child: Card(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.record_voice_over_sharp),
+                    title: Row(
+                      children: [
+                        Text(
+                          userLogin,
+                          style: TextStyle(
+                            color: Color.fromARGB(172, 0, 0, 0),
+                            fontFamily: "OpenSans-SemiBold",
+                            fontSize: 22,
+                          ),
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              if (discriptionController.text != "") {
+                                FirebaseFirestore.instance
+                                    .collection('reviews')
+                                    .add({
+                                  'discription': discriptionController.text,
+                                  'quizId': activeQuizId,
+                                  'userLogin': userLogin
+                                });
+                              }
+                            },
+                            icon: Icon(Icons.send))
+                      ],
+                    ),
+                    subtitle: TextField(
+                      keyboardType: TextInputType.multiline,
+                      minLines: 1,
+                      maxLines: 3,
+                      controller: discriptionController,
+                      style: TextStyle(
+                        color: Color.fromARGB(120, 0, 0, 0),
+                        fontFamily: "OpenSans-SemiBold",
+                        fontSize: 22,
+                      ),
+                      cursorColor: Color.fromARGB(120, 0, 0, 0),
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 0, color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 0, color: Colors.white),
+                        ),
+                        filled: true,
+                        hintText: "Отзыв",
+                        fillColor: Color.fromARGB(249, 255, 255, 255),
+                        hintStyle: TextStyle(
+                            color: Color.fromARGB(120, 0, 0, 0),
+                            fontFamily: "OpenSans-SemiBold",
+                            fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
           Container(
               width: (MediaQuery.of(context).size.width * 1),
@@ -173,8 +233,14 @@ class _StartGameState extends State<StartGame> {
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                      bool fd =  snapshot.data?.docs.where((element) => element.get('quizId') == activeQuizId).length ==0;
-                  if (snapshot.data?.docs.length == 0 || !snapshot.hasData || fd ) {
+                  bool fd = snapshot.data?.docs
+                          .where((element) =>
+                              element.get('quizId') == activeQuizId)
+                          .length ==
+                      0;
+                  if (snapshot.data?.docs.length == 0 ||
+                      !snapshot.hasData ||
+                      fd) {
                     return Text(
                       textAlign: TextAlign.center,
                       "Нет отзывов",
@@ -261,5 +327,3 @@ class _StartGameState extends State<StartGame> {
     );
   }
 }
-
-int? quizStars;

@@ -316,7 +316,8 @@ class _CreateQuestionState extends State<CreateQuestion> {
                         color: Color.fromARGB(250, 132, 199, 110),
                         onPressed: () {
                           if (quesIndex == 0) {
-                            Navigator.popAndPushNamed(context, '/mainPage');
+                           
+                            Navigator.pop(context);
                           } else {
                             setState(() {
                               quesIndex = quesIndex - 1;
@@ -423,7 +424,8 @@ class _CreateQuestionState extends State<CreateQuestion> {
                               });
                             }
 
-                            Navigator.popAndPushNamed(context, '/mainPage');
+                            
+                            Navigator.pop(context);
                           } else {
                             setState(() {
                               quesIndex = quesIndex + 1;

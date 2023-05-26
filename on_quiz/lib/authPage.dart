@@ -199,7 +199,7 @@ class _MyAuthPageState extends State<AuthPage> {
                                         querySnapshot.docs[i].get('Login');
                                   }
                                 }
-                                Navigator.pushNamed(context, '/mainPage');
+                                Navigator.popAndPushNamed(context, '/mainPage');
                               } else {
                                 setState(() {
                                   ErrorMes = "Вы не зарегистрированы";
