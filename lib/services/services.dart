@@ -3,7 +3,7 @@ import 'model.dart';
 
 class DbConnection {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-// Регистрация
+
   Future<UserModel?> signUp(String email, String password) async {
     try {
       UserCredential result =
@@ -18,7 +18,7 @@ class DbConnection {
     }
   }
 
-  // авторизация
+
   Future<UserModel?> signIn(String email, String password) async {
     try {
       UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
